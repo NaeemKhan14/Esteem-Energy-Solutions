@@ -69,35 +69,68 @@
                         <div class="card card-chart">
                             <div class="card-header">
                                 <h5 class="card-category"></h5>
-                                <h4 class="card-title">Energy Generation</h4>
+                                <h4 class="card-title">Backup Mode</h4>
                                 <div class="dropdown">
-                                    <button type="button"
-                                        class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
-                                        data-toggle="dropdown">
-                                        <i class="now-ui-icons loader_gear"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="/energy">View more</a>
-                                        <!--<a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                        <a class="dropdown-item text-danger" href="#">Remove Data</a>-->
-                                    </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="energy_generation"></canvas>
-                                </div>
+                                <p>Uses power from unless battery charge 100% (Use only when frequent power cuts). 
+                                </p>
+                                
+                                <button type="button"
+                                        class=" btn-outline-default "
+                                        >
+                                        Enable
+                                    </button>
                             </div>
-                            <div class="card-footer">
-                                <div class="stats">
-                                    Battery :<span style="font-weight: 700; color: green;"> 90 % </span>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
 
+                    <div class="col-lg-4">
+                        <div class="card card-chart">
+                            <div class="card-header">
+                                <h5 class="card-category"></h5>
+                                <h4 class="card-title">Self Powered</h4>
+                                <div class="dropdown">
+                                  
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>Powered from solar panel and battery (Recommeded). 
+                                </p>
+                                
+                                <button type="button"
+                                        class=" btn-outline-danger">
+                                        Disable
+                                    </button>
+                            </div>
+                            
+                        </div>
+                    </div>
 
+                    <div class="col-lg-4">
+                        <div class="card card-chart">
+                            <div class="card-header">
+                                <h5 class="card-category"></h5>
+                                <h4 class="card-title">Only Grid</h4>
+                                <div class="dropdown">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>Power Pulled from Grid (Not Recommeded). 
+                                </p>
+                                
+                                <button type="button"
+                                        class=" btn-outline-default ">
+                                        Enable
+                                    </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                   
+                   
                 </div>
             </div>
 
@@ -124,21 +157,53 @@
                         data: {
                             labels: ["1:00", "2:00", "3:00"],
                             datasets: [{
-                                label: "KwH",
-                                borderColor: chartColor,
-                                pointBorderColor: chartColor,
-                                pointBackgroundColor: "#1e3d60",
-                                pointHoverBackgroundColor: "#1e3d60",
-                                pointHoverBorderColor: chartColor,
-                                pointBorderWidth: 1,
-                                pointHoverRadius: 7,
-                                pointHoverBorderWidth: 2,
-                                pointRadius: 5,
-                                fill: true,
-                                backgroundColor: gradientFill,
-                                borderWidth: 2,
-                                data: [1, 7, 9] // Fill in data here 
-                            }]
+                        label: "Solar Panel KwH",
+                        borderColor: chartColor,
+                        pointBorderColor: chartColor,
+                        pointBackgroundColor: "#1e3d60",
+                        pointHoverBackgroundColor: "#1e3d60",
+                        pointHoverBorderColor: chartColor,
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 7,
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 5,
+                        fill: true,
+                        backgroundColor: gradientFill,
+                        borderWidth: 2,
+                        data: [1, 7, 9] // Fill in data here 
+                    },
+                    {
+                        label: "Battery KwH",
+                        borderColor: "green",
+                        pointBorderColor: "green",
+                        pointBackgroundColor: "green",
+                        pointHoverBackgroundColor: "green",
+                        pointHoverBorderColor: "green",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 7,
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 5,
+                        fill: true,
+                        backgroundColor: gradientFill,
+                        borderWidth: 2,
+                        data: [8, 7, -2] // Fill in data here 
+                    },
+                    {
+                        label: "Grid KwH",
+                        borderColor: "red",
+                        pointBorderColor: "red",
+                        pointBackgroundColor: "red",
+                        pointHoverBackgroundColor: "red",
+                        pointHoverBorderColor: "red",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 7,
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 5,
+                        fill: true,
+                        backgroundColor: gradientFill,
+                        borderWidth: 2,
+                        data: [0, 0, 0] // Fill in data here 
+                    }]
                         },
                         options: {
                             layout: {

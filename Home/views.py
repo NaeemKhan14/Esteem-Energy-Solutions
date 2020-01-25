@@ -9,14 +9,16 @@ class HomePage(TemplateView):
         return render(request, self.template_name, {})
 
 
-class RoomPage(TemplateView):
-    template_name = 'home/index.html'
+
+class EnergyGeneration(TemplateView):
+    template_name = 'home/energy.html'
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})
 
-class EnergyGeneration(TemplateView):
-    template_name = 'home/index.html'
+
+class RoomPage(TemplateView):
+    template_name = 'home/room.html'
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})
