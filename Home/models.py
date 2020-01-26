@@ -2,11 +2,11 @@ from django.db import models
 
 # Create your models here.
 class room(models.Model):
-    room_no = models.IntegerField(primary_key=True)
+    room_no = models.AutoField(primary_key=True)
     room_name = models.TextField(max_length = 40)
 
 class plugs(models.Model):
-    plug_no = models.IntegerField(primary_key=True)
+    plug_no = models.AutoField(primary_key=True)
     plug_name = models.TextField(max_length = 40)
     plug_model_name = models.TextField(max_length = 40)
     room_no = models.ForeignKey(room, default=1, on_delete=models.CASCADE)
@@ -24,7 +24,7 @@ class plug_electricity_consumption(models.Model):
 
 # Second part 
 class energy_generation(models.Model):
-    e_id = models.IntegerField(primary_key=True)
+    e_id = models.AutoField(primary_key=True)
     name = models.TextField()
 
 class battery(models.Model):

@@ -24,12 +24,14 @@ Tip 1: You can change the color of the sidebar using: data-color="blue | green |
                     <p>Energy generation</p>
                 </a>
             </li>
+            {% for rooms in Room %}
             <li>
-                <a href="/room">
+                <a href="/energy">
 
-                    <p>Bedroom</p>
+                    <p>{{ rooms.room_name }}</p>
                 </a>
             </li>
+            {% endfor %}
 
             <!--<li class="active-pro">
                 <a href="./upgrade.html">
