@@ -1,6 +1,6 @@
 # Requirements
 
-- PostgreSQL: https://www.postgresql.org/download/
+- PostgreSQL 12.x: https://www.postgresql.org/download/
 - Python 3.8.1: https://www.python.org/ftp/python/3.8.1/python-3.8.1.exe
 - (Optional) PyCharm Professional (recommended, but community version is okay as well): https://www.jetbrains.com/pycharm/download
 
