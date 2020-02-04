@@ -10,12 +10,9 @@ class plugs(models.Model):
     plug_name = models.TextField(max_length = 40)
     plug_model_name = models.TextField(max_length = 40)
     room_no = models.ForeignKey(room, default=1, on_delete=models.CASCADE)
-
-class plug_config(models.Model):
-    plug_no = models.ForeignKey(plugs, default=1, on_delete=models.CASCADE)
-    current_power = models.TextField()
-    turn_on = models.TextField()
-    turn_off = models.TextField()
+    current_status = models.TextField(default='')
+    turn_on = models.TextField(default='')
+    turn_off = models.TextField(default='')
 
 class plug_electricity_consumption(models.Model):
     plug_no = models.ForeignKey(plugs, default=1,on_delete=models.CASCADE)

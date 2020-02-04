@@ -5,7 +5,7 @@
 
 <body class="">
     <div class="wrapper ">
-       
+
         <!-- Side Bar -->
         {% include "home/partials/sidebar.html" %}
 
@@ -21,7 +21,8 @@
                                 <span class="navbar-toggler-bar bar3"></span>
                             </button>
                         </div>
-                        <a class="navbar-brand" href="#pablo">Electricity Used( <span style="font-weight: 700;">{{ Room_in.room_name }}</span> )</a>
+                        <a class="navbar-brand" href="#pablo">Electricity Used( <span
+                                style="font-weight: 700;">{{ Room_in.room_name }}</span> )</a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
                         aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,9 +31,9 @@
                         <span class="navbar-toggler-bar navbar-kebab"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                      
+
                         <ul class="navbar-nav">
-                          
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
@@ -78,8 +79,13 @@
                                         <i class="now-ui-icons loader_gear"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Change URL path</a>
-                                        <a class="dropdown-item" href="#">Remove smart plug</a>
+                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <form method="POST" action="/plugs"> {% csrf_token %}
+                                            <input type="hidden" name="type" value="remove"/>
+                                            <input type="hidden" name="room_no" value="{{ Room_in.room_no }}"/>
+                                            <input type="hidden" name="plug_no" value="{{ plugs.plug_no }}"/>
+                                            <input type="submit" name="submit" value="Remove smart plug" class="dropdown-item" />
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -88,45 +94,95 @@
                                     <canvas id="energy_generation"></canvas>
                                 </div>
                             </div>
-                            
+
                             <div class="card-footer">
-                                <button type="button"
-                                        class=" btn-outline-danger">
-                                        Turn on
-                                    </button>
+                                <button type="button" class=" btn-outline-danger">
+                                    Turn on
+                                </button>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
+
                     <div class="col-lg-4">
                         <div class="card card-chart">
                             <div class="card-header">
                                 <h5 class="card-category"></h5>
-                                <h4 class="card-title">Lamp</h4>
+                                <center><h4 class="card-title">ADD DEVICE</h4></center>
                                 <div class="dropdown">
-                                    <button type="button"
-                                        class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
-                                        data-toggle="dropdown">
-                                        <i class="now-ui-icons loader_gear"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Change URL path</a>
-                                        <a class="dropdown-item" href="#">Remove smart plug</a>
-                                    </div>
+
+
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="energy_generation"></canvas>
+
+                                <center><button type="button"
+                                        class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                                        data-toggle="modal" data-target="#addroom">
+                                        <i class="now-ui-icons ui-1_simple-add"></i>
+                                    </button></center>
+
+                                <!-- Modal -->
+                                <div id="addroom" class="modal fade" role="dialog">
+                                    <form method="POST" action="/plugs">{% csrf_token %} 
+                                        <!--Hidden input-->
+                                        <input type="hidden" name="type" value="add" />
+                                        <input type="hidden" name="room_no" value="{{ Room_in.room_no }}" />
+
+                                        <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <center><h4 class="modal-title">Add Device</h4></center>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>
+                                                        <label>Device Name </label>
+                                                        &nbsp;
+                                                        <input type="text" id="device_name" name="plug_name"
+                                                            value="" />
+                                                    </p>
+                                                    <p>
+                                                        <label>Device Model </label>
+                                                        &nbsp;
+                                                        <input type="text" id="plug_model_name" name="plug_model_name"
+                                                            value="" />
+                                                    </p>
+                                                    <p>
+                                                        <label>Turn ON </label>
+                                                        &nbsp;
+                                                        <input type="text" id="turn_on" name="turn_on" value="" />
+                                                    </p>
+
+                                                    <p>
+                                                        <label>Turn OFF </label>
+                                                        &nbsp;
+                                                        <input type="text" id="turn_off" name="turn_off" value="" />
+                                                    </p>
+
+                                                    <p>
+                                                        <label>Current Status </label>
+                                                        &nbsp;
+                                                        <input type="text" id="current_status" name="current_status"
+                                                            value="" />
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="submit" name="submit" value="confirm" class="btn btn-default" />
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            
-                            <div class="card-footer">
-                                <button type="button"
-                                        class=" btn-outline-danger">
-                                        Turn on
-                                    </button>
-                            </div>
+                            <!-- <div class="card-footer">
+                                <div class="stats">
+                                   Status: <span style="font-weight: 700; color: green;">Active</span>
+                                </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -136,146 +192,146 @@
 
             <script>
                 $(document).ready(function () {
-            // Javascript method's body can be found in assets/js/demos.js
-            // demo.initDashboardPageCharts();
+                    // Javascript method's body can be found in assets/js/demos.js
+                    // demo.initDashboardPageCharts();
 
-            // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
+                    // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
 
-            var ctx = document.getElementById('EnergyChart').getContext("2d");
-            chartColor = "#FFFFFF";
+                    var ctx = document.getElementById('EnergyChart').getContext("2d");
+                    chartColor = "#FFFFFF";
 
-            var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-            gradientStroke.addColorStop(0, '#80b6f4');
-            gradientStroke.addColorStop(1, chartColor);
+                    var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+                    gradientStroke.addColorStop(0, '#80b6f4');
+                    gradientStroke.addColorStop(1, chartColor);
 
-            var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
-            gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-            gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
+                    var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
+                    gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+                    gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
 
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ["1:00", "2:00", "3:00"],
-                    datasets: [
-                    {
-                        label: "Lamp KwH",
-                        borderColor: "#f96332",
-                        pointBorderColor: "#f96332",
-                        pointBackgroundColor: "#f96332",
-                        pointHoverBackgroundColor: "#f96332",
-                        pointHoverBorderColor: "#f96332",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 7,
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 5,
-                        fill: true,
-                        backgroundColor: gradientFill,
-                        borderWidth: 2,
-                        data: [542, 480, 430] // Fill in data here 
-                    }
-                ]
-                },
-                options: {
-                    layout: {
-                        padding: {
-                            left: 20,
-                            right: 20,
-                            top: 0,
-                            bottom: 0
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ["1:00", "2:00", "3:00"],
+                            datasets: [
+                                {
+                                    label: "Lamp KwH",
+                                    borderColor: "#f96332",
+                                    pointBorderColor: "#f96332",
+                                    pointBackgroundColor: "#f96332",
+                                    pointHoverBackgroundColor: "#f96332",
+                                    pointHoverBorderColor: "#f96332",
+                                    pointBorderWidth: 1,
+                                    pointHoverRadius: 7,
+                                    pointHoverBorderWidth: 2,
+                                    pointRadius: 5,
+                                    fill: true,
+                                    backgroundColor: gradientFill,
+                                    borderWidth: 2,
+                                    data: [542, 480, 430] // Fill in data here 
+                                }
+                            ]
+                        },
+                        options: {
+                            layout: {
+                                padding: {
+                                    left: 20,
+                                    right: 20,
+                                    top: 0,
+                                    bottom: 0
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            tooltips: {
+                                backgroundColor: '#fff',
+                                titleFontColor: '#333',
+                                bodyFontColor: '#666',
+                                bodySpacing: 4,
+                                xPadding: 12,
+                                mode: "nearest",
+                                intersect: 0,
+                                position: "nearest"
+                            },
+                            legend: {
+                                position: "bottom",
+                                fillStyle: "#FFF",
+                                display: false
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        fontColor: "rgba(255,255,255,0.4)",
+                                        fontStyle: "bold",
+                                        beginAtZero: true,
+                                        maxTicksLimit: 5,
+                                        padding: 10
+                                    },
+                                    gridLines: {
+                                        drawTicks: true,
+                                        drawBorder: false,
+                                        display: true,
+                                        color: "rgba(255,255,255,0.1)",
+                                        zeroLineColor: "transparent"
+                                    }
+
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        zeroLineColor: "transparent",
+                                        display: false,
+
+                                    },
+                                    ticks: {
+                                        padding: 10,
+                                        fontColor: "rgba(255,255,255,0.4)",
+                                        fontStyle: "bold"
+                                    }
+                                }]
+                            }
                         }
-                    },
-                    maintainAspectRatio: false,
-                    tooltips: {
-                        backgroundColor: '#fff',
-                        titleFontColor: '#333',
-                        bodyFontColor: '#666',
-                        bodySpacing: 4,
-                        xPadding: 12,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest"
-                    },
-                    legend: {
-                        position: "bottom",
-                        fillStyle: "#FFF",
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                fontColor: "rgba(255,255,255,0.4)",
-                                fontStyle: "bold",
-                                beginAtZero: true,
-                                maxTicksLimit: 5,
-                                padding: 10
-                            },
-                            gridLines: {
-                                drawTicks: true,
-                                drawBorder: false,
-                                display: true,
-                                color: "rgba(255,255,255,0.1)",
-                                zeroLineColor: "transparent"
+                    });
+
+                    var cardStatsMiniLineColor = "#fff",
+                        cardStatsMiniDotColor = "#fff";
+
+                    //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
+
+                    var ctx1 = document.getElementById('energy_generation').getContext("2d");
+
+                    gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
+                    gradientStroke.addColorStop(0, '#80b6f4');
+                    gradientStroke.addColorStop(1, chartColor);
+
+                    gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
+                    // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+                    //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
+
+                    myChart1 = new Chart(ctx1, {
+                        type: 'line',
+                        responsive: true,
+                        data: {
+                            labels: ["1:00", "2:00", "4:00", "5:00"],
+                            datasets: [{
+                                label: "Lamp KwH",
+                                borderColor: "#f96332",
+                                pointBorderColor: "#FFF",
+                                pointBackgroundColor: "#f96332",
+                                pointBorderWidth: 2,
+                                pointHoverRadius: 4,
+                                pointHoverBorderWidth: 1,
+                                pointRadius: 4,
+                                fill: true,
+                                backgroundColor: gradientFill,
+                                borderWidth: 2,
+                                data: [542, 480, 430, 12]             // Data point
                             }
-
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                                zeroLineColor: "transparent",
-                                display: false,
-
-                            },
-                            ticks: {
-                                padding: 10,
-                                fontColor: "rgba(255,255,255,0.4)",
-                                fontStyle: "bold"
-                            }
-                        }]
-                    }
-                }
-            });
-
-            var cardStatsMiniLineColor = "#fff",
-                cardStatsMiniDotColor = "#fff";
-
-            //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
-
-            var ctx1 = document.getElementById('energy_generation').getContext("2d");
-
-            gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
-            gradientStroke.addColorStop(0, '#80b6f4');
-            gradientStroke.addColorStop(1, chartColor);
-
-            gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
-           // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-            //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
-
-            myChart1 = new Chart(ctx1, {
-                type: 'line',
-                responsive: true,
-                data: {
-                    labels: ["1:00", "2:00", "4:00","5:00"],
-                    datasets: [{
-                        label: "Lamp KwH",
-                        borderColor: "#f96332",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#f96332",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        fill: true,
-                        backgroundColor: gradientFill,
-                        borderWidth: 2,
-                        data: [542, 480, 430,12]             // Data point
-                    }
-                ]
-                },
-                options: gradientChartOptionsConfiguration
-            });
+                            ]
+                        },
+                        options: gradientChartOptionsConfiguration
+                    });
 
 
 
-        });
+                });
             </script>
 
             {% include "home/partials/footer.html" %}

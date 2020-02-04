@@ -110,8 +110,12 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="/room?room_no={{ rooms.room_no }}">View more</a>
-                                        <!--<a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                        <form method="POST" action="/room_action"> {% csrf_token %}
+                                            <input type="hidden" name="type" value="remove"/>
+                                            <input type="hidden" name="room_no" value="{{ rooms.room_no }}"/>
+                                            <input type="submit" name="submit" value="remove" class="dropdown-item" />
+                                        </form>
+                                        <!---<a class="dropdown-item" href="#">Something else here</a>
                                         <a class="dropdown-item text-danger" href="#">Remove Data</a>-->
                                     </div>
                                 </div>
@@ -124,6 +128,67 @@
                         </div>
                     </div>
                     {% endfor %}
+                    
+                    <div class="col-lg-4">
+                        <div class="card card-chart">
+                            <div class="card-header">
+                                <h5 class="card-category"></h5>
+                                <center><h4 class="card-title">ADD ROOM</h4></center>
+                                <div class="dropdown">
+                                    <!--<button type="button"
+                                        class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                                        data-toggle="dropdown">
+                                        <i class="now-ui-icons loader_gear"></i>
+                                    </button>-->
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">View more</a>
+                                        <!--<a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                        <a class="dropdown-item text-danger" href="#">Remove Data</a>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <center><button type="button"
+                                        class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                                        data-toggle="modal" data-target="#myModal">
+                                        <i class="now-ui-icons ui-1_simple-add"></i>
+                                    </button></center>
+                                <!-- Modal -->
+                                <div id="myModal" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                       <form method="POST" action="/room_action"> {% csrf_token %} 
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Add Room</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                    <label>Room Name </label>
+                                                    <input type="text" id="myText" name="name" value="" />
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" name="submit" value="confirm" class="btn btn-default" />
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                       </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="card-footer">
+                                <div class="stats">
+                                   Status: <span style="font-weight: 700; color: green;">Active</span>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                    
 
 
                 </div>
