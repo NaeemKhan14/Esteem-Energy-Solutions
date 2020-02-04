@@ -27,10 +27,7 @@ def randomize_data(interval):
     global kawaii
     Timer(interval, randomize_data, [interval]).start()
     index = randint(0, len(kawaii) - 1)
-    if kawaii[index]['Status'] == 'Off':
-        kawaii[index]['Status'] = 'On'
-    else:
-        kawaii[index]['Status'] = 'Off'
+    kawaii[index]['Status'] = 'On' if kawaii[index]['Status'] == 'Off' else 'Off'
 
 # Change status every second.
 randomize_data(1)
