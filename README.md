@@ -1,6 +1,6 @@
 # Requirements
 
-- PostgreSQL: https://www.postgresql.org/download/
+- PostgreSQL 12.x: https://www.postgresql.org/download/
 - Python 3.8.1: https://www.python.org/ftp/python/3.8.1/python-3.8.1.exe
 - (Optional) PyCharm Professional (recommended, but community version is okay as well): https://www.jetbrains.com/pycharm/download
 
@@ -20,6 +20,6 @@
 
 - PyCharm Professional is recommended as it supports and helps with the development of Django-based websites. After cloning the repository, open that folder as project in PyCharm and in the terminal, write **pip install -r requirements.txt**.
 
-- Once completed, run the command **py manage.py makemigrations** and then **py manage.py migrate**.
+- Once completed, run the command **py manage.py makemigrations** (**py manage.py makemigrations _APPNAME_** if the first one doesn't work) and then **py manage.py migrate**.
 
 - To start the server, write **py manage.py runserver** in terminal.
