@@ -20,6 +20,6 @@
 
 - PyCharm Professional is recommended as it supports and helps with the development of Django-based websites. After cloning the repository, open that folder as project in PyCharm and in the terminal, write **pip install -r requirements.txt**.
 
-- Once completed, run the command **py manage.py makemigrations** and then **py manage.py migrate**.
+- Once completed, run the command **py manage.py makemigrations** (**py manage.py makemigrations _APPNAME_** if the first one doesn't work) and then **py manage.py migrate**.
 
 - To start the server, write **py manage.py runserver** in terminal.
