@@ -49,6 +49,7 @@ class RoomPage(TemplateView):
         if 'add_device' in request.POST:
             plugs.objects.create(plug_name=request.POST.get('plug_name'),
                                  plug_model_name=request.POST.get('plug_model_name'),
+                                 ip_address=request.POST.get('plug_model_name'),
                                  room_no=room.objects.get(room_no=room_no))
         if 'remove_device' in request.POST:
             plugs.objects.filter(plug_no=request.POST.get('plug_no')).delete()
