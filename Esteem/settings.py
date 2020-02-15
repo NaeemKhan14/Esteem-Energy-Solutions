@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = '/'
 
 # Application definition
 
@@ -134,3 +135,12 @@ GRAPH_MODELS = {
     'all_applications':True,
     'group_models': True,
 }
+
+# Email settings
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = 'SG.PqFLSUiLQVS00QvbGQcTuQ.9j8l9HpcjvK-cb6CLdAp3wjcC07zVYsKqhQbihl3ciw'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Esteem Power Solutions <noreply@esteem.com>'
