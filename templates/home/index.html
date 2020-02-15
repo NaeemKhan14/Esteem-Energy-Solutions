@@ -127,12 +127,13 @@
                         </div>
                     </div>
                 {% endfor %}
-
+                {% load custom_tags %}
+                {% if request.user|has_group:"Admin" %}
                 <div class="col-lg-4">
                     <div class="card card-chart">
                         <div class="card-header">
                             <h5 class="card-category"></h5>
-                            <center><h4 class="card-title">ADD ROOM</h4></center>
+                                <center><h4 class="card-title">ADD ROOM</h4></center>
                             <div class="dropdown">
                                 <!--<button type="button"
                                     class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
@@ -191,7 +192,7 @@
                         </div> -->
                     </div>
                 </div>
-
+                {% endif %} 
 
             </div>
         </div>
