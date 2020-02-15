@@ -27,8 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL = '/'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Esteem.middleware.LoginRequiredMiddleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'Esteem.urls'
@@ -144,3 +143,14 @@ EMAIL_HOST_PASSWORD = 'SG.PqFLSUiLQVS00QvbGQcTuQ.9j8l9HpcjvK-cb6CLdAp3wjcC07zVYs
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Esteem Power Solutions <noreply@esteem.com>'
+
+# Login settings
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'accounts/login/'
+
+# List of pages that can be accessed without being logged in
+
+LOGIN_EXEMPT_URLS = (
+    r'^accounts/$',
+)
