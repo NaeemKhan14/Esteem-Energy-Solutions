@@ -7,71 +7,53 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
 # Create some test data for our catalog in the form of a list of dictionaries.
+
 Devices = [
-    { 
-        "Lamp":
-        [
             {
-             'id': 1,
-             'DeviceName': 'Lamp 1',
-             'ElecConsp': '20 kWh'
+             'DeviceName': 'Lamp1',
+             'ElecConsp': 0.02,
+             'CurConsp': 0.02,
+             'status':'on'
             },
             {
-             'id': 0,
-             'DeviceName': 'Lamp 2',
-             'ElecConsp': '1 kWh'
+             'DeviceName': 'Lamp2',
+             'ElecConsp': 0.03,
+             'CurConsp': 0.03,
+             'status':'on'
+            },
+            {
+             'DeviceName': 'Fridge1',
+             'ElecConsp': 0.13,
+             'CurConsp': 0.13,
+             'status':'on'
+            },
+            {
+             'DeviceName': 'Fridge2',
+             'ElecConsp': 0.15,
+             'CurConsp': 0.15,
+             'status':'on'
+             },
+             {
+             'DeviceName': 'Tv1',
+             'ElecConsp': 0.07,
+             'CurConsp': 0.07,
+             'status':'on'
+            },
+            {
+             'DeviceName': 'Tv2',
+             'ElecConsp': 0.08,
+             'CurConsp': 0.08,
+             'status':'on'
+            },
+            {
+             'DeviceName': 'Ac1',
+             'ElecConsp': 0.98,
+             'CurConsp': 1.20,
+             'status':'on'
             }
-        ]
-    },
-    
-    {
-        "Fridge":
-        [
-            {
-             'id': 1,
-             'DeviceName': 'Fridge 1',
-             'ElecConsp': '500 kWh'
-            },
-            {
-             'id': 0,
-             'DeviceName': 'Fridge 2',
-             'ElecConsp': '15 kWh'
-             }
-        ]
-    },    
 
-    {
-        "Tv":
-        [
-            {
-             'id': 1,
-             'DeviceName': 'Tv 1',
-             'ElecConsp': '90 kWh'
-            },
-            {
-             'id': 0,
-             'DeviceName': 'Tv 2',
-             'ElecConsp': '2 kWh'
-            }
-        ]
-    },
-
-    {
-        "AC":
-        [
-            {
-             'id': 1,
-             'DeviceName': 'Ac 1',
-             'ElecConsp': '3000 kWH'
-            },
-            {
-             'id': 0,
-             'DeviceName': 'Ac 2',
-             'ElecConsp': '20 kWh'
-            }
-        ]
-    }
 ]
+
 
 
 # # Selects a random item's Status from the list and changes it depending on its state.
@@ -85,8 +67,52 @@ Devices = [
 # randomize_data(1)
 
 # A route to return all of the available entries in our catalog.
-@app.route('/api/v1/kawaii', methods=['GET'])
-def api_all():
-    return jsonify(Devices)
+@app.route('/api/<string:device_id>', methods=['GET'])
+def api_all(device_id):
+
+    for device in range(len(Devices)):
+        print(Devices[device]['DeviceName'])
+        if Devices[device]['DeviceName'] == device_id:
+            return jsonify(Devices[device])
+
+    return jsonify('No device exsists with this id')
+
+
+#Used to turn on and off any device 
+@app.route('/api/changestatus/<string:device_id>', methods=['GET'])
+def api_status(device_id):
+    for device in range(len(Devices)):
+        print(Devices[device]['DeviceName'])
+        if Devices[device]['DeviceName'] == device_id:
+            if Devices[device]['status'] == 'on':
+               Devices[device]['status'] = 'off'
+               Devices[device]['CurConsp'] = '0'
+
+            else:
+               Devices[device]['status'] = 'on'
+               Devices[device]['CurConsp'] = Devices[device]['ElecConsp']
+               
+            return jsonify(Devices[device])
+
+    return jsonify('No device exsists with this id') 
+
+@app.route('/api/energyconsumption/<string:device_id>', methods=['GET'])
+def device_consumption(device_id):
+    for device in range(len(Devices)):
+        print(Devices[device]['DeviceName'])
+        if Devices[device]['DeviceName'] == device_id:
+            return jsonify(Devices[device]['CurConsp'])
+
+    return jsonify('No device exsists with this id')
+
+@app.route('/api/alldevicesconsumption/', methods=['GET'])
+def total_consumption():
+    for device in Devices:
+        return jsonify(Devices)
+
+    return jsonify('No device exsists in the api')
+
+
+
 
 app.run()
