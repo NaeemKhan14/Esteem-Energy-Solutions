@@ -2,6 +2,16 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from Home.models import room, plugs
+from Home.task import notify
+from background_task import background
+
+
+class background_task():
+    @background(schedule=2)
+    def notify_user():
+       print("here")
+
+
 
 
 class HomePage(TemplateView):
@@ -55,3 +65,13 @@ class RoomPage(TemplateView):
             plugs.objects.filter(plug_no=request.POST.get('plug_no')).delete()
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+    
+
+    
+    
+       
+
+
+

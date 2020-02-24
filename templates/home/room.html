@@ -80,11 +80,14 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="#">Edit</a>
+                                        {% load custom_tags %}
+                                        {% if request.user|has_group:"Admin" %}
                                         <form method="POST"> {% csrf_token %}
                                             <input type="hidden" name="plug_no" value="{{ plugs.plug_no }}"/>
                                             <input type="submit" name="remove_device" value="Remove Device"
                                                    class="dropdown-item"/>
                                         </form>
+                                        {% endif %} 
                                     </div>
                                 </div>
                             </div>
@@ -102,7 +105,8 @@
                         </div>
                     </div>
                 {% endfor %}
-
+                {% load custom_tags %}
+                {% if request.user|has_group:"Admin" %}
                 <div class="col-lg-4">
                     <div class="card card-chart">
                         <div class="card-header">
@@ -169,7 +173,7 @@
                         </div> -->
                     </div>
                 </div>
-
+                {% endif %} 
 
             </div>
         </div>
@@ -180,6 +184,16 @@
                 // demo.initDashboardPageCharts();
 
                 // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
+
+
+               // All device_id here
+                var device_id = []
+
+                {% for plugs in Plugs %}
+                device_id.push("{{ plugs.plug_name }}")
+                {% endfor %}
+
+                
 
                 var ctx = document.getElementById('EnergyChart').getContext("2d");
                 chartColor = "#FFFFFF";

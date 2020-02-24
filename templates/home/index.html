@@ -221,8 +221,11 @@
 
            function pushValues(){
                consumptionData.push(consumption);
-               timeIntervalData.push("+1 hr ");
-               console.log(consumptionData);
+
+               // This is for current time 
+               timeIntervalData.push(new Date(new Date().getTime() + 4*60*60*1000).toLocaleTimeString());
+
+               //console.log(consumptionData);
            }
 
         //    setInterval(pushValues, 5000);
