@@ -1,17 +1,15 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from Home.models import room, plugs
-from Home.task import notify
 from background_task import background
 
 
-class background_task():
-    @background(schedule=2)
-    def notify_user():
-       print("here")
+class TestClass:
 
-
+    @background
+    def test_func(self):
+        print("HIIIIIIIIIIIIIIIIIIIII")
 
 
 class HomePage(TemplateView):
@@ -27,6 +25,7 @@ class HomePage(TemplateView):
             room.objects.create(room_name=request.POST.get('name'))
 
         return redirect('homepage')
+
 
 class EnergyGeneration(TemplateView):
     template_name = 'home/energy.html'
