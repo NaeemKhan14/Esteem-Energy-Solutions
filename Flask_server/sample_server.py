@@ -54,6 +54,22 @@ Devices = [
 
 ]
 
+PowerSources = [
+            {
+             'SourceName': 'Battery1',
+             'EnergyLevel': 98,
+             'Charging':'true',
+             'SupplyingPower': 'false',
+            },
+            {
+             'SourceName': 'SolarPanel1',
+             'EnergyLevel': 50,
+             'Charging':'false',
+             'SupplyingPower': 'false',
+            }
+
+]
+
 
 
 # # Selects a random item's Status from the list and changes it depending on its state.
@@ -113,6 +129,11 @@ def total_consumption():
     return jsonify('No device exsists in the api')
 
 
+@app.route('/api/getEnergySources/', methods=['GET'])
+def energy_sources():
+    for sources in PowerSources:
+        return jsonify(PowerSources)
 
+    return jsonify('No power source present')
 
 app.run()
