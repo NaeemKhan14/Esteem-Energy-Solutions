@@ -1,7 +1,7 @@
 import flask
 from flask import jsonify
-from threading import Timer
-from random import randint
+##from threading import Timer
+##from random import randint
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -83,57 +83,53 @@ PowerSources = [
 # randomize_data(1)
 
 # A route to return all of the available entries in our catalog.
-@app.route('/api/<string:device_id>', methods=['GET'])
-def api_all(device_id):
+##@app.route('/api/<string:device_id>', methods=['GET'])
+##def api_all(device_id):
+##
+##    for device in range(len(Devices)):
+##        print(Devices[device]['DeviceName'])
+##        if Devices[device]['DeviceName'] == device_id:
+##            return jsonify(Devices[device])
+##
+##    return jsonify('No device exsists with this id')
 
-    for device in range(len(Devices)):
-        print(Devices[device]['DeviceName'])
-        if Devices[device]['DeviceName'] == device_id:
-            return jsonify(Devices[device])
 
-    return jsonify('No device exsists with this id')
-
-
-#Used to turn on and off any device 
-@app.route('/api/changestatus/<string:device_id>', methods=['GET'])
-def api_status(device_id):
-    for device in range(len(Devices)):
-        print(Devices[device]['DeviceName'])
-        if Devices[device]['DeviceName'] == device_id:
-            if Devices[device]['status'] == 'on':
-               Devices[device]['status'] = 'off'
-               Devices[device]['CurConsp'] = '0'
-
-            else:
-               Devices[device]['status'] = 'on'
-               Devices[device]['CurConsp'] = Devices[device]['ElecConsp']
-               
-            return jsonify(Devices[device])
-
-    return jsonify('No device exsists with this id') 
-
-@app.route('/api/energyconsumption/<string:device_id>', methods=['GET'])
-def device_consumption(device_id):
-    for device in range(len(Devices)):
-        print(Devices[device]['DeviceName'])
-        if Devices[device]['DeviceName'] == device_id:
-            return jsonify(Devices[device]['CurConsp'])
-
-    return jsonify('No device exsists with this id')
+###Used to turn on and off any device 
+##@app.route('/api/changestatus/<string:device_id>', methods=['GET'])
+##def api_status(device_id):
+##    for device in range(len(Devices)):
+##        print(Devices[device]['DeviceName'])
+##        if Devices[device]['DeviceName'] == device_id:
+##            if Devices[device]['status'] == 'on':
+##               Devices[device]['status'] = 'off'
+##               Devices[device]['CurConsp'] = '0'
+##
+##            else:
+##               Devices[device]['status'] = 'on'
+##               Devices[device]['CurConsp'] = Devices[device]['ElecConsp']
+##               
+##            return jsonify(Devices[device])
+##
+##    return jsonify('No device exsists with this id') 
+##
+##@app.route('/api/energyconsumption/<string:device_id>', methods=['GET'])
+##def device_consumption(device_id):
+##    for device in range(len(Devices)):
+##        print(Devices[device]['DeviceName'])
+##        if Devices[device]['DeviceName'] == device_id:
+##            return jsonify(Devices[device]['CurConsp'])
+##
+##    return jsonify('No device exsists with this id')
 
 @app.route('/api/alldevicesconsumption/', methods=['GET'])
 def total_consumption():
-    for device in Devices:
-        return jsonify(Devices)
+    return jsonify(Devices)
 
-    return jsonify('No device exsists in the api')
-
-
-@app.route('/api/getEnergySources/', methods=['GET'])
-def energy_sources():
-    for sources in PowerSources:
-        return jsonify(PowerSources)
-
-    return jsonify('No power source present')
+##@app.route('/api/getEnergySources/', methods=['GET'])
+##def energy_sources():
+##    for sources in PowerSources:
+##        return jsonify(PowerSources)
+##
+##    return jsonify('No power source present')
 
 app.run()
