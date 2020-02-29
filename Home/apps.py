@@ -5,5 +5,9 @@ class HomeConfig(AppConfig):
     name = 'Home'
 
     def ready(self):
-        from Home.views import TestClass
-        TestClass.test_func(repeat=10, repeat_until=None)
+        import os
+        from . import jobs
+
+        # RUN_MAIN check to avoid running the code twice since manage.py runserver runs 'ready' twice on startup
+        if os.environ.get('RUN_MAIN', None) != 'true':
+            jobs.start()

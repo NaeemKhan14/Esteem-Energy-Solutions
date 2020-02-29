@@ -1,15 +1,14 @@
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from Home.models import room, plugs
-from background_task import background
 
 
 class TestClass:
 
-    @background
-    def test_func(self):
-        print("HIIIIIIIIIIIIIIIIIIIII")
+    @staticmethod
+    def test_func():
+        print("HIIIIIIIIIIII")
 
 
 class HomePage(TemplateView):
