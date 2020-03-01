@@ -1,23 +1,32 @@
 	
 
 	<div id="dropDownSelect1"></div>
-	
+         {% load static %}
     <!--===============================================================================================-->
-        <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+        <script src="{% static 'login/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
     <!--===============================================================================================-->
-        <script src="vendor/animsition/js/animsition.min.js"></script>
+        <script src="{% static 'login/vendor/animsition/js/animsition.min.js' %}"></script>
     <!--===============================================================================================-->
-        <script src="vendor/bootstrap/js/popper.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="{% static 'login/vendor/bootstrap/js/popper.js' %}"></script>
+        <script src="{% static 'login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
     <!--===============================================================================================-->
-        <script src="vendor/select2/select2.min.js"></script>
+        <script src="{% static 'login/vendor/select2/select2.min.js' %}"></script>
     <!--===============================================================================================-->
-        <script src="vendor/daterangepicker/moment.min.js"></script>
-        <script src="vendor/daterangepicker/daterangepicker.js"></script>
+        <script src="{% static 'login/vendor/daterangepicker/moment.min.js' %}"></script>
+        <script src="{% static 'login/vendor/daterangepicker/daterangepicker.js' %}"></script>
     <!--===============================================================================================-->
-        <script src="vendor/countdowntime/countdowntime.js"></script>
+        <script src="{% static 'login/vendor/countdowntime/countdowntime.js' %}"></script>
     <!--===============================================================================================-->
-        <script src="js/main.js"></script>
+        <script src="{% static 'login/js/main.js' %}"></script>
     
+    <script>
+        $( document ).ready(function() {
+            $( "#id_username" ).last().addClass( "input100" );
+            $("#id_username").attr("placeholder", "Username");
+
+            $( "#id_password" ).last().addClass( "input100" );
+            $("#id_password").attr("placeholder", "Password");
+        });
+    </script>
     </body>
     </html>

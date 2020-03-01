@@ -1,10 +1,40 @@
 {% include "registration/partials/header.html" %}
 <body>
-    <h2>Login</h2>
+    <div class="limiter">
+		<div class="container-login100" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs3.envato.com%2Ffiles%2F210581090%2FPoints%2520And%2520Lines%2520Clean%2520Background%2520Dark.jpg&f=1&nofb=1');">
+			<div class="wrap-login100 p-t-30 p-b-50">
+				<span class="login100-form-title p-b-41">
+					ESTEEM
+				</span>
+				<form class="login100-form validate-form p-b-33 p-t-5" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+					<div class="wrap-input100 validate-input" data-validate = "Enter username">	
+                        {{ field }}
+                        <span class="focus-input100" data-placeholder=""></span>
+					</div>
+                    {% endfor %}
+					<!--<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<input class="input100" type="password" name="pass" placeholder="Password">
+						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
+                    </div>-->
+
+					<div class="container-login100-form-btn m-t-32">
+						<button class="login100-form-btn" type="submit">
+							Login
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+	
+    <!--<h2>Login</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Login</button>
-    </form>
+    </form>-->
 
 {% include "registration/partials/footer.html" %}
