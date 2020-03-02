@@ -83,53 +83,53 @@ PowerSources = [
 # randomize_data(1)
 
 # A route to return all of the available entries in our catalog.
-##@app.route('/api/<string:device_id>', methods=['GET'])
-##def api_all(device_id):
-##
-##    for device in range(len(Devices)):
-##        print(Devices[device]['DeviceName'])
-##        if Devices[device]['DeviceName'] == device_id:
-##            return jsonify(Devices[device])
-##
-##    return jsonify('No device exsists with this id')
+@app.route('/api/<string:device_id>', methods=['GET'])
+def api_all(device_id):
+
+   for device in range(len(Devices)):
+       print(Devices[device]['DeviceName'])
+       if Devices[device]['DeviceName'] == device_id:
+           return jsonify(Devices[device])
+
+   return jsonify('No device exsists with this id')
 
 
 ###Used to turn on and off any device 
-##@app.route('/api/changestatus/<string:device_id>', methods=['GET'])
-##def api_status(device_id):
-##    for device in range(len(Devices)):
-##        print(Devices[device]['DeviceName'])
-##        if Devices[device]['DeviceName'] == device_id:
-##            if Devices[device]['status'] == 'on':
-##               Devices[device]['status'] = 'off'
-##               Devices[device]['CurConsp'] = '0'
+@app.route('/api/changestatus/<string:device_id>', methods=['GET'])
+def api_status(device_id):
+   for device in range(len(Devices)):
+       print(Devices[device]['DeviceName'])
+       if Devices[device]['DeviceName'] == device_id:
+           if Devices[device]['status'] == 'on':
+              Devices[device]['status'] = 'off'
+              Devices[device]['CurConsp'] = '0'
+
+           else:
+              Devices[device]['status'] = 'on'
+              Devices[device]['CurConsp'] = Devices[device]['ElecConsp']
+              
+           return jsonify(Devices[device])
+
+   return jsonify('No device exsists with this id') 
 ##
-##            else:
-##               Devices[device]['status'] = 'on'
-##               Devices[device]['CurConsp'] = Devices[device]['ElecConsp']
-##               
-##            return jsonify(Devices[device])
-##
-##    return jsonify('No device exsists with this id') 
-##
-##@app.route('/api/energyconsumption/<string:device_id>', methods=['GET'])
-##def device_consumption(device_id):
-##    for device in range(len(Devices)):
-##        print(Devices[device]['DeviceName'])
-##        if Devices[device]['DeviceName'] == device_id:
-##            return jsonify(Devices[device]['CurConsp'])
-##
-##    return jsonify('No device exsists with this id')
+@app.route('/api/energyconsumption/<string:device_id>', methods=['GET'])
+def device_consumption(device_id):
+   for device in range(len(Devices)):
+       print(Devices[device]['DeviceName'])
+       if Devices[device]['DeviceName'] == device_id:
+           return jsonify(Devices[device]['CurConsp'])
+
+   return jsonify('No device exsists with this id')
 
 @app.route('/api/alldevicesconsumption/', methods=['GET'])
 def total_consumption():
     return jsonify(Devices)
 
-##@app.route('/api/getEnergySources/', methods=['GET'])
-##def energy_sources():
-##    for sources in PowerSources:
-##        return jsonify(PowerSources)
-##
-##    return jsonify('No power source present')
+@app.route('/api/getEnergySources/', methods=['GET'])
+def energy_sources():
+   for sources in PowerSources:
+       return jsonify(PowerSources)
+
+   return jsonify('No power source present')
 
 app.run()
