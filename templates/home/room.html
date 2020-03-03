@@ -3,7 +3,7 @@
 
 <!----------------------------------------------- Graph init ---------------------------------------------------------------->
 
-<body class="">
+<body class="" >
 <div class="wrapper ">
 
     <!-- Side Bar -->
@@ -87,7 +87,7 @@
                                             <input type="submit" name="remove_device" value="Remove Device"
                                                    class="dropdown-item"/>
                                         </form>
-                                        {% endif %} 
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -98,9 +98,7 @@
                             </div>
 
                             <div class="card-footer">
-                                <button type="button" class=" btn-outline-danger">
-                                    Turn on
-                                </button>
+                                <button type="button" id="{{ plugs.plug_name}}" onclick="changestatusfn('{{ plugs.plug_name }}')" class=" btn-outline-danger">Turn ON</button>
                             </div>
                         </div>
                     </div>
@@ -173,27 +171,86 @@
                         </div> -->
                     </div>
                 </div>
-                {% endif %} 
+                {% endif %}
 
             </div>
         </div>
 
         <script>
+            var device_id = []
+
+                {% for plugs in Plugs %}
+
+
+                device_id.push("{{ plugs.plug_name }}");
+                console.log(device_id);
+
+                 var device_name = "{{ plugs.plug_name }}";
+                 console.log("name is " + device_name);
+                 var api_url = 'http://127.0.0.1:5000/api/' + device_name;
+                 console.log("api url is " + api_url);
+
+                 getcurrentStatus(device_name);
+
+
+                {% endfor %}
+
+
+            function changestatusfn(device) {
+                changeStatusapi(device);
+                var x = document.getElementById(device);
+                console.log(" x is "+x.innerHTML);
+                if (x.innerHTML === "Turn ON") {
+                    x.innerHTML = "Turn OFF";
+                  } else {
+                    x.innerHTML = "Turn ON";
+                  }
+                }
+
+                async function changeStatusapi(device){
+
+                    var api_url = 'http://127.0.0.1:5000/api/changestatus/'+device;
+                    console.log(api_url);
+                    var response = await fetch(api_url);
+                    var data = await response.json();
+
+
+                }
+
+                async function getcurrentStatus(device){
+
+                    var api_url = 'http://127.0.0.1:5000/api/' + device;
+                    var response = await fetch(api_url);
+                    var data = await response.json();
+                    var currentstatus = data.status;
+                    console.log(device + " : " + currentstatus)
+                    var x = document.getElementById(device);
+
+
+                    if (currentstatus === "off"){
+                        x.innerHTML = "Turn ON";
+
+                    } else {
+                        console.log("on");
+                        x.innerHTML = "Turn OFF";
+
+                    }
+
+                }
+
+
+
+
+
             $(document).ready(function () {
                 // Javascript method's body can be found in assets/js/demos.js
                 // demo.initDashboardPageCharts();
 
                 // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
 
-
                // All device_id here
-                var device_id = []
 
-                {% for plugs in Plugs %}
-                device_id.push("{{ plugs.plug_name }}")
-                {% endfor %}
 
-                
 
                 var ctx = document.getElementById('EnergyChart').getContext("2d");
                 chartColor = "#FFFFFF";
