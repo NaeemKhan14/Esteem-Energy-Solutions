@@ -219,7 +219,8 @@
                consumptionData.push(consumption);
 
                // This is for current time 
-               timeIntervalData.push(new Date(new Date().getTime() + 4*60*60*1000).toLocaleTimeString());
+               timeIntervalData.push(new Date().toLocaleTimeString());
+
 
                //console.log(consumptionData);
            }
@@ -331,6 +332,8 @@
                         }
                     }
                 });
+                myChart.update(0);
+
 
                 var cardStatsMiniLineColor = "#fff",
                     cardStatsMiniDotColor = "#fff";
