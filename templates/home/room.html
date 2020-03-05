@@ -182,15 +182,15 @@
                 {% for plugs in Plugs %}
 
 
-                device_id.push("{{ plugs.plug_name }}");
+                device_id.push(["{{ plugs.plug_name }}","{{ plugs.ip_address}}"]);
                 console.log(device_id);
 
                  var device_name = "{{ plugs.plug_name }}";
                  console.log("name is " + device_name);
-                 var api_url = 'http://127.0.0.1:5000/api/' + device_name;
+                 var api_url = '{{plugs.ip_address}}/api/' + device_name;
                  console.log("api url is " + api_url);
 
-                 getcurrentStatus(device_name);
+                 getcurrentStatus(device_name,"{{plugs.ip_address}}");
 
 
                 {% endfor %}
@@ -217,9 +217,10 @@
 
                 }
 
-                async function getcurrentStatus(device){
+                async function getcurrentStatus(device,ip_address){
 
-                    var api_url = 'http://127.0.0.1:5000/api/' + device;
+                    var api_url = 'http://'+ip_address+'/api/' + device;
+                    console.log(api_url);
                     var response = await fetch(api_url);
                     var data = await response.json();
                     var currentstatus = data.status;
