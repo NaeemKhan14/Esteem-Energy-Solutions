@@ -98,7 +98,7 @@
                             </div>
 
                             <div class="card-footer">
-                                <button type="button" id="{{ plugs.plug_name}}" onclick="changestatusfn('{{ plugs.plug_name }}')" class=" btn-outline-danger">Turn ON</button>
+                                <button type="button" id="{{ plugs.plug_name}}" onclick="changestatusfn('{{ plugs.plug_name }}','{{ plugs.ip_address }}')" class=" btn-outline-danger">Turn ON</button>
                             </div>
                         </div>
                     </div>
@@ -207,9 +207,9 @@
                   }
                 }
 
-                async function changeStatusapi(device){
+                async function changeStatusapi(device,ip_address){
 
-                    var api_url = 'http://127.0.0.1:5000/api/changestatus/'+device;
+                    var api_url = 'http://'+ip_address+'/api/changestatus/'+device;
                     console.log(api_url);
                     var response = await fetch(api_url);
                     var data = await response.json();
