@@ -6,6 +6,8 @@ from Home.models import room, plugs
 import requests
 
 
+
+
 class TestClass:
 
     @staticmethod
@@ -40,6 +42,11 @@ def change_status_fn(device):
     change_status_response = requests.get(change_status_url)
 
 
+
+
+
+
+
 class RoomPage(TemplateView):
     template_name = 'home/room.html'
 
@@ -54,9 +61,35 @@ class RoomPage(TemplateView):
         if not hasattr(plugs_in_room, '__iter__'):
             plugs_in_room = [plugs_in_room]
 
+        devices = []
+        consumption = []
+
+        for d in plugs_in_room:
+            devices.append(d.plug_name)
+        print(devices)
+
+        def get_consumption(device):
+            get_consumption_url = "http://127.0.0.1:5000/api/energyconsumption/" + device
+            get_consumption_response = requests.get(get_consumption_url)
+            # print("Consumption of " + device + " is " + str(get_consumption_response.json()))
+            consumption.append(get_consumption_response.json())
+
+        def live_consumption():
+            for i in range(len(devices)):
+                get_consumption(devices[i])
+            print(consumption)
+            return consumption
+
+        print("test")
+        live_consumption()
+
+
         return render(request, self.template_name, {"Room": room.objects.all(),
                                                     "Room_in": room.objects.get(room_no=kwargs["room_no"]),
-                                                    "Plugs": plugs_in_room}, )
+                                                    "Plugs": plugs_in_room, "Consumption": consumption},
+
+
+                      )
 
     def post(self, request, *args, **kwargs):
         room_no = request.POST.get('room_no')
