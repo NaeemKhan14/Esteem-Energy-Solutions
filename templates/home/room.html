@@ -98,7 +98,12 @@
                             </div>
 
                             <div class="card-footer">
-                                <button type="button" id="{{ plugs.plug_name}}" onclick="changestatusfn('{{ plugs.plug_name }}')" class=" btn-outline-danger">Turn ON</button>
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <button type="submit" value="{{ plugs.plug_name}}" id="{{ plugs.plug_name }}" name="change_status" class=" btn-outline-danger">Turn ON</button>
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -181,41 +186,15 @@
 
                 {% for plugs in Plugs %}
 
-
-                device_id.push(["{{ plugs.plug_name }}","{{ plugs.ip_address}}"]);
-
                  var device_name = "{{ plugs.plug_name }}";
-                 var api_url = '{{plugs.ip_address}}/api/' + device_name;
-
-                 getcurrentStatus(device_name,"{{plugs.ip_address}}");
-
+                 getcurrentStatus(device_name);
 
                 {% endfor %}
 
 
-            function changestatusfn(device) {
-                changeStatusapi(device);
-                var x = document.getElementById(device);
-                {#console.log(" x is "+x.innerHTML);#}
-                if (x.innerHTML === "Turn ON") {
-                    x.innerHTML = "Turn OFF";
-                  } else {
-                    x.innerHTML = "Turn ON";
-                  }
-                }
+                async function getcurrentStatus(device){
 
-                async function changeStatusapi(device){
-
-                    var api_url = 'http://127.0.0.1:5000/api/changestatus/' + device;
-                    var response = await fetch(api_url);
-                    var data = await response.json();
-
-
-                }
-
-                async function getcurrentStatus(device,ip_address){
-
-                    var api_url = 'http://'+ip_address+'/api/' + device;
+                    var api_url = 'http://127.0.0.1:5000/api/' + device;
                     var response = await fetch(api_url);
                     var data = await response.json();
                     var currentstatus = data.status;
@@ -225,17 +204,12 @@
 
                     if (currentstatus === "off"){
                         x.innerHTML = "Turn ON";
-
                     } else {
-                        {#console.log("on");#}
                         x.innerHTML = "Turn OFF";
 
                     }
 
                 }
-
-
-
 
 
             $(document).ready(function () {
@@ -245,7 +219,6 @@
                 // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
 
                // All device_id here
-
 
 
                 var ctx = document.getElementById('EnergyChart').getContext("2d");
@@ -346,45 +319,16 @@
 
                 //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
 
-                 {% for plugs in Plugs %}
-
-
-                device_id.push(["{{ plugs.plug_name }}","{{ plugs.ip_address}}"]);
+                {% for plugs in Plugs %}
 
                  var device_name = "{{ plugs.plug_name }}";
-                 {#console.log("name is " + device_name);#}
-                 var api_url = '{{plugs.ip_address}}/api/' + device_name;
-                 {#console.log("api url is " + api_url);#}
-
                  chart_devices(device_name);
 
-                 var consumption_url = 'http://127.0.0.1:5000/api/energyconsumption/'+device_name;
+                 {% endfor %}
 
 
-
-
-                {% endfor %}
-
-                var consumption_data =null;
-                var consumption_array = [];
-
-                async function getConsumption(device) {
-                    var consumption_url = 'http://127.0.0.1:5000/api/energyconsumption/'+device;
-                    const response = await fetch(consumption_url);
-                    const data = await response.json();
-                    consumption_data = data;
-                    pushValues_device();
-
-
-                    function pushValues_device() {
-                        consumption_array.push(consumption_data);
-                    }
-
-
-
-                }
                 async function chart_devices(device) {
-                    await getConsumption(device);
+
                     var device_id = "energy_generation_" + device;
                     var ctx1 = document.getElementById(device_id).getContext("2d");
 
@@ -420,9 +364,6 @@
                         options: gradientChartOptionsConfiguration
                     });
                 }
-
-
-
 
             });
         </script>

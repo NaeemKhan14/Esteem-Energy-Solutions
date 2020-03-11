@@ -1,7 +1,9 @@
+from django.contrib.sites import requests
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from Home.models import room, plugs
+import requests
 
 
 class TestClass:
@@ -33,6 +35,11 @@ class EnergyGeneration(TemplateView):
         return render(request, self.template_name)
 
 
+def change_status_fn(device):
+    change_status_url = "http://127.0.0.1:5000/api/changestatus/" + device
+    change_status_response = requests.get(change_status_url)
+
+
 class RoomPage(TemplateView):
     template_name = 'home/room.html'
 
@@ -49,10 +56,13 @@ class RoomPage(TemplateView):
 
         return render(request, self.template_name, {"Room": room.objects.all(),
                                                     "Room_in": room.objects.get(room_no=kwargs["room_no"]),
-                                                    "Plugs": plugs_in_room})
+                                                    "Plugs": plugs_in_room}, )
 
     def post(self, request, *args, **kwargs):
         room_no = request.POST.get('room_no')
+
+        if 'change_status' in request.POST:
+            change_status_fn(request.POST['change_status'])
 
         if 'add_device' in request.POST:
             plugs.objects.create(plug_name=request.POST.get('plug_name'),
@@ -63,13 +73,3 @@ class RoomPage(TemplateView):
             plugs.objects.filter(plug_no=request.POST.get('plug_no')).delete()
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-
-    
-
-    
-    
-       
-
-
-
