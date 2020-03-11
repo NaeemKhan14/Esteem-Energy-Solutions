@@ -182,14 +182,20 @@
         </div>
 
         <script>
-            var device_id = []
+
+            var device_id = [];
 
                 {% for plugs in Plugs %}
 
+
+
+
                  var device_name = "{{ plugs.plug_name }}";
+                 device_id.push(device_name);
                  getcurrentStatus(device_name);
 
                 {% endfor %}
+            console.log(device_id);
 
 
                 async function getcurrentStatus(device){
@@ -213,6 +219,14 @@
 
 
             $(document).ready(function () {
+                var consumptionn = "{{ Consumption }}";
+                var dataLabel = JSON.parse(consumptionn);
+                {##}
+                {#for (let i = 0; i < consumptionn; i++) {#}
+                {#    #}
+                {#}#}
+                console.log("consumption array :" + consumptionn[15]);
+
                 // Javascript method's body can be found in assets/js/demos.js
                 // demo.initDashboardPageCharts();
 
@@ -233,27 +247,30 @@
                 gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
 
                 var myChart = new Chart(ctx, {
-                    type: 'line',
+                    type: 'pie',
                     data: {
-                        labels: ["1:00", "2:00", "3:00"],
-                        datasets: [
-                            {
-                                label: "Lamp KwH",
-                                borderColor: "#f96332",
-                                pointBorderColor: "#f96332",
-                                pointBackgroundColor: "#f96332",
-                                pointHoverBackgroundColor: "#f96332",
-                                pointHoverBorderColor: "#f96332",
-                                pointBorderWidth: 1,
-                                pointHoverRadius: 7,
-                                pointHoverBorderWidth: 2,
-                                pointRadius: 5,
-                                fill: true,
-                                backgroundColor: gradientFill,
-                                borderWidth: 2,
-                                data: [542, 480, 430] // Fill in data here
-                            }
-                        ]
+                        labels: device_id,
+                        datasets: [{
+                            label: '# of Votes',
+                            data: dataLabel,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
                     },
                     options: {
                         layout: {
@@ -312,6 +329,7 @@
                             }]
                         }
                     }
+
                 });
 
                 var cardStatsMiniLineColor = "#fff",
