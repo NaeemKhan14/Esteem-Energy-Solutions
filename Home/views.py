@@ -58,13 +58,13 @@ class RoomPage(TemplateView):
             # print("Consumption of " + device + " is " + str(get_consumption_response.json()))
             consumption.append(get_consumption_response.json())
 
+
         def scan_available_devices():
             available_devices = []
             response = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/")
             temp = response.json()
             for index in range(len(temp)):
                 available_devices.append(temp[index]['DeviceName'])
-            print(available_devices)
 
         scan_available_devices()
 
