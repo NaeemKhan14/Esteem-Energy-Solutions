@@ -225,7 +225,7 @@
                 {#for (let i = 0; i < consumptionn; i++) {#}
                 {#    #}
                 {#}#}
-                console.log("consumption array :" + consumptionn[15]);
+                console.log("consumption array :" + dataLabel);
 
                 // Javascript method's body can be found in assets/js/demos.js
                 // demo.initDashboardPageCharts();
@@ -247,11 +247,11 @@
                 gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
 
                 var myChart = new Chart(ctx, {
-                    type: 'pie',
+                    type: 'doughnut',
                     data: {
                         labels: device_id,
                         datasets: [{
-                            label: '# of Votes',
+                            label: 'Current Consumption',
                             data: dataLabel,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
@@ -293,9 +293,9 @@
                             position: "nearest"
                         },
                         legend: {
-                            position: "bottom",
-                            fillStyle: "#FFF",
-                            display: false
+                            position: "top",
+                            fillStyle: "",
+                            display: true,
                         },
                         scales: {
                             yAxes: [{
