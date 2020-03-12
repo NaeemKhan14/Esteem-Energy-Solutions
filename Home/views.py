@@ -50,21 +50,20 @@ class RoomPage(TemplateView):
             plugs_in_room = [plugs_in_room]
 
         consumption = []
+        available_devices = []
+        response = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/").json()
 
+        for index in range(len(response)):
+            available_devices.append(response[index]['DeviceName'])
+
+        room_devices = []
         for plug in plugs_in_room:
-            consumption.append(requests.get("http://127.0.0.1:5000/api/energyconsumption/" + plug.plug_name).json())
+            api_devices = requests.get("http://127.0.0.1:5000/api/energyconsumption/" + plug.plug_name).json()
+            consumption.append(api_devices)
+            room_devices.append(plug.plug_name)
 
-
-        def scan_available_devices():
-            available_devices = []
-            response = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/")
-            temp = response.json()
-            for index in range(len(temp)):
-                available_devices.append(temp[index]['DeviceName'])
-
-        scan_available_devices()
-
-
+        m = [x for x in available_devices if x not in room_devices]
+        print(m)
         return render(request, self.template_name, {"Room": room.objects.all(),
                                                     "Room_in": room.objects.get(room_no=kwargs["room_no"]),
                                                     "Plugs": plugs_in_room, "Consumption": consumption},
@@ -72,7 +71,6 @@ class RoomPage(TemplateView):
 
 
     def post(self, request, *args, **kwargs):
-        room_no = request.POST.get('room_no')
 
         if 'change_status' in request.POST:
             requests.get("http://127.0.0.1:5000/api/changestatus/" + request.POST['change_status'])
@@ -81,7 +79,7 @@ class RoomPage(TemplateView):
             plugs.objects.create(plug_name=request.POST.get('plug_name'),
                                  plug_model_name=request.POST.get('plug_model_name'),
                                  ip_address=request.POST.get('ip_address'),
-                                 room_no=room.objects.get(room_no=room_no))
+                                 room_no=room.objects.get(room_no=request.POST['room_no']))
         if 'remove_device' in request.POST:
             plugs.objects.filter(plug_no=request.POST.get('plug_no')).delete()
 
