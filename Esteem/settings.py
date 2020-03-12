@@ -76,17 +76,17 @@ WSGI_APPLICATION = 'Esteem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'Esteem',
-#         'USER': 'postgres',
-#         'PASSWORD': 'abc123',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-DATABASES = { 'default': { 'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'mydatabase', } }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Esteem',
+        'USER': 'postgres',
+        'PASSWORD': 'abc123',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+# DATABASES = { 'default': { 'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'mydatabase', } }
 
 
 # Password validation
