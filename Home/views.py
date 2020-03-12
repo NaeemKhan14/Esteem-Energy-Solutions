@@ -35,17 +35,7 @@ class EnergyGeneration(TemplateView):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
-
-
-def change_status_fn(device):
-    change_status_url = "http://127.0.0.1:5000/api/changestatus/" + device
-    change_status_response = requests.get(change_status_url)
-
-
-
-
-
-
+    
 
 class RoomPage(TemplateView):
     template_name = 'home/room.html'
@@ -61,28 +51,12 @@ class RoomPage(TemplateView):
         if not hasattr(plugs_in_room, '__iter__'):
             plugs_in_room = [plugs_in_room]
 
-        devices = []
         consumption = []
 
-        for d in plugs_in_room:
-            devices.append(d.plug_name)
-        print(devices)
-
-        def get_consumption(device):
-            get_consumption_url = "http://127.0.0.1:5000/api/energyconsumption/" + device
-            get_consumption_response = requests.get(get_consumption_url)
+        for plug in plugs_in_room:
+            get_consumption_response = requests.get("http://127.0.0.1:5000/api/energyconsumption/" + plug.plug_name)
             # print("Consumption of " + device + " is " + str(get_consumption_response.json()))
             consumption.append(get_consumption_response.json())
-
-        def live_consumption():
-            for i in range(len(devices)):
-                get_consumption(devices[i])
-            print(consumption)
-            return consumption
-
-        print("test")
-        live_consumption()
-
 
         return render(request, self.template_name, {"Room": room.objects.all(),
                                                     "Room_in": room.objects.get(room_no=kwargs["room_no"]),
@@ -95,7 +69,7 @@ class RoomPage(TemplateView):
         room_no = request.POST.get('room_no')
 
         if 'change_status' in request.POST:
-            change_status_fn(request.POST['change_status'])
+            change_status_response = requests.get("http://127.0.0.1:5000/api/changestatus/" + request.POST['change_status'])
 
         if 'add_device' in request.POST:
             plugs.objects.create(plug_name=request.POST.get('plug_name'),
