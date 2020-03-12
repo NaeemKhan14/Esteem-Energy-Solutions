@@ -129,3 +129,5 @@ dmypy.json
 # Django files
 migrations/
 mydatabase
+
+Flask_server/abc.html
