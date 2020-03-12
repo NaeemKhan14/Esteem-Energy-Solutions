@@ -1,14 +1,21 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-from Home.models import room, plugs
+from Home.models import room, plugs , plug_electricity_consumption, energy_generation, energy_mode, battery,power_transaction, power_generation
 
 
-class TestClass:
+class BackgroundClass:
 
     @staticmethod
     def test_func():
         print("HIIIIIIIIIIII")
+    
+    @staticmethod
+    def power_allot_func():
+        #check power mode
+        #Total power consumption by house 
+        # Do according transaction 
+        print("lol")
 
 
 class HomePage(TemplateView):
@@ -30,6 +37,16 @@ class EnergyGeneration(TemplateView):
     template_name = 'home/energy.html'
 
     def get(self, request, *args, **kwargs):
+        ## Not secure but working solution 
+        type_data = request.GET.get('type_data')
+        #plugs.objects.create(type_data)
+        energy_mode.objects.all().delete()
+        if type_data != None:
+           energy_mode.objects.create(mode_id=type_data)
+
+        print(energy_mode.objects.all())
+
+        # Type_data for 
         return render(request, self.template_name)
 
 

@@ -23,6 +23,10 @@ class energy_generation(models.Model):
     e_id = models.AutoField(primary_key=True)
     name = models.TextField()
 
+class energy_mode(models.Model):
+    mode_id = models.TextField(max_length = 4)
+
+
 class battery(models.Model):
     e_id = models.ForeignKey(energy_generation, default=1,on_delete=models.CASCADE)
     capacity = models.DecimalField(max_digits=20, decimal_places=2) 
