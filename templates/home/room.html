@@ -93,12 +93,17 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <canvas id="energy_generation"></canvas>
+                                    <canvas id="energy_generation_{{ plugs.plug_name }}" class="energy_chartArea"></canvas>
                                 </div>
                             </div>
 
                             <div class="card-footer">
-                                <button type="button" id="{{ plugs.plug_name}}" onclick="changestatusfn('{{ plugs.plug_name }}','{{ plugs.ip_address }}')" class=" btn-outline-danger">Turn ON</button>
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <button type="submit" value="{{ plugs.plug_name}}" id="{{ plugs.plug_name }}" name="change_status" class=" btn-outline-danger">Turn ON</button>
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -177,50 +182,25 @@
         </div>
 
         <script>
-            var device_id = []
+
+            var device_id = [];
 
                 {% for plugs in Plugs %}
 
 
-                device_id.push(["{{ plugs.plug_name }}","{{ plugs.ip_address}}"]);
-                console.log(device_id);
+
 
                  var device_name = "{{ plugs.plug_name }}";
-                 console.log("name is " + device_name);
-                 var api_url = '{{plugs.ip_address}}/api/' + device_name;
-                 console.log("api url is " + api_url);
-
-                 getcurrentStatus(device_name,"{{plugs.ip_address}}");
-
+                 device_id.push(device_name);
+                 getcurrentStatus(device_name);
 
                 {% endfor %}
+            console.log(device_id);
 
 
-            function changestatusfn(device) {
-                changeStatusapi(device);
-                var x = document.getElementById(device);
-                console.log(" x is "+x.innerHTML);
-                if (x.innerHTML === "Turn ON") {
-                    x.innerHTML = "Turn OFF";
-                  } else {
-                    x.innerHTML = "Turn ON";
-                  }
-                }
+                async function getcurrentStatus(device){
 
-                async function changeStatusapi(device,ip_address){
-
-                    var api_url = 'http://'+ip_address+'/api/changestatus/'+device;
-                    console.log(api_url);
-                    var response = await fetch(api_url);
-                    var data = await response.json();
-
-
-                }
-
-                async function getcurrentStatus(device,ip_address){
-
-                    var api_url = 'http://'+ip_address+'/api/' + device;
-                    console.log(api_url);
+                    var api_url = 'http://127.0.0.1:5000/api/' + device;
                     var response = await fetch(api_url);
                     var data = await response.json();
                     var currentstatus = data.status;
@@ -230,9 +210,7 @@
 
                     if (currentstatus === "off"){
                         x.innerHTML = "Turn ON";
-
                     } else {
-                        console.log("on");
                         x.innerHTML = "Turn OFF";
 
                     }
@@ -240,17 +218,21 @@
                 }
 
 
-
-
-
             $(document).ready(function () {
+                var consumptionn = "{{ Consumption }}";
+                var dataLabel = JSON.parse(consumptionn);
+                {##}
+                {#for (let i = 0; i < consumptionn; i++) {#}
+                {#    #}
+                {#}#}
+                console.log("consumption array :" + consumptionn[15]);
+
                 // Javascript method's body can be found in assets/js/demos.js
                 // demo.initDashboardPageCharts();
 
                 // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
 
                // All device_id here
-
 
 
                 var ctx = document.getElementById('EnergyChart').getContext("2d");
@@ -265,27 +247,30 @@
                 gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
 
                 var myChart = new Chart(ctx, {
-                    type: 'line',
+                    type: 'pie',
                     data: {
-                        labels: ["1:00", "2:00", "3:00"],
-                        datasets: [
-                            {
-                                label: "Lamp KwH",
-                                borderColor: "#f96332",
-                                pointBorderColor: "#f96332",
-                                pointBackgroundColor: "#f96332",
-                                pointHoverBackgroundColor: "#f96332",
-                                pointHoverBorderColor: "#f96332",
-                                pointBorderWidth: 1,
-                                pointHoverRadius: 7,
-                                pointHoverBorderWidth: 2,
-                                pointRadius: 5,
-                                fill: true,
-                                backgroundColor: gradientFill,
-                                borderWidth: 2,
-                                data: [542, 480, 430] // Fill in data here
-                            }
-                        ]
+                        labels: device_id,
+                        datasets: [{
+                            label: '# of Votes',
+                            data: dataLabel,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
                     },
                     options: {
                         layout: {
@@ -344,6 +329,7 @@
                             }]
                         }
                     }
+
                 });
 
                 var cardStatsMiniLineColor = "#fff",
@@ -351,40 +337,51 @@
 
                 //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
 
-                var ctx1 = document.getElementById('energy_generation').getContext("2d");
+                {% for plugs in Plugs %}
 
-                gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
-                gradientStroke.addColorStop(0, '#80b6f4');
-                gradientStroke.addColorStop(1, chartColor);
+                 var device_name = "{{ plugs.plug_name }}";
+                 chart_devices(device_name);
 
-                gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
-                // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-                //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
+                 {% endfor %}
 
-                myChart1 = new Chart(ctx1, {
-                    type: 'line',
-                    responsive: true,
-                    data: {
-                        labels: ["1:00", "2:00", "4:00", "5:00"],
-                        datasets: [{
-                            label: "Lamp KwH",
-                            borderColor: "#f96332",
-                            pointBorderColor: "#FFF",
-                            pointBackgroundColor: "#f96332",
-                            pointBorderWidth: 2,
-                            pointHoverRadius: 4,
-                            pointHoverBorderWidth: 1,
-                            pointRadius: 4,
-                            fill: true,
-                            backgroundColor: gradientFill,
-                            borderWidth: 2,
-                            data: [542, 480, 430, 12]             // Data point
-                        }
-                        ]
-                    },
-                    options: gradientChartOptionsConfiguration
-                });
 
+                async function chart_devices(device) {
+
+                    var device_id = "energy_generation_" + device;
+                    var ctx1 = document.getElementById(device_id).getContext("2d");
+
+                    gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
+                    gradientStroke.addColorStop(0, '#80b6f4');
+                    gradientStroke.addColorStop(1, chartColor);
+
+                    gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
+                    // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+                    //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
+
+                    var myChart1 = new Chart(ctx1, {
+                        type: 'line',
+                        responsive: true,
+                        data: {
+                            labels: ["1:00", "2:00", "4:00", "5:00"],
+                            datasets: [{
+                                label: "Lamp KwH",
+                                borderColor: "#f96332",
+                                pointBorderColor: "#FFF",
+                                pointBackgroundColor: "#f96332",
+                                pointBorderWidth: 2,
+                                pointHoverRadius: 4,
+                                pointHoverBorderWidth: 1,
+                                pointRadius: 4,
+                                fill: true,
+                                backgroundColor: gradientFill,
+                                borderWidth: 2,
+                                data: [10, 40, 30, 5]        // Data point
+                            }
+                            ]
+                        },
+                        options: gradientChartOptionsConfiguration
+                    });
+                }
 
             });
         </script>
