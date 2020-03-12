@@ -102,7 +102,7 @@ def api_status(device_id):
        if Devices[device]['DeviceName'] == device_id:
            if Devices[device]['status'] == 'on':
               Devices[device]['status'] = 'off'
-              Devices[device]['CurConsp'] = '0'
+              Devices[device]['CurConsp'] = 0
 
            else:
               Devices[device]['status'] = 'on'
