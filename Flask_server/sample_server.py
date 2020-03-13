@@ -11,45 +11,59 @@ app.config["DEBUG"] = True
 Devices = [
             {
              'DeviceName': 'Lamp1',
+             'DeviceModel': 'Amazing Lights',
              'ElecConsp': 0.02,
              'CurConsp': 0.02,
-             'status':'on'
+             'status':'on',
+             'ip_address': '127.0.0.2'
             },
             {
              'DeviceName': 'Lamp2',
+             'DeviceModel': 'Amazing Lights',
              'ElecConsp': 0.03,
              'CurConsp': 0.03,
-             'status':'on'
+             'status':'on',
+             'ip_address': '127.0.0.3'
             },
             {
              'DeviceName': 'Fridge1',
+             'DeviceModel': 'Amazing Cooling',
              'ElecConsp': 0.13,
              'CurConsp': 0.13,
-             'status':'on'
+             'status':'on',
+             'ip_address': '127.0.0.4'
             },
             {
              'DeviceName': 'Fridge2',
+             'DeviceModel': 'Amazing Cooling',
              'ElecConsp': 0.15,
              'CurConsp': 0.15,
-             'status':'on'
+             'status':'on',
+             'ip_address': '127.0.0.5'
              },
              {
              'DeviceName': 'Tv1',
+             'DeviceModel': 'Amazing Entertainment',
              'ElecConsp': 0.07,
              'CurConsp': 0.07,
-             'status':'on'
+             'status':'on',
+             'ip_address': '127.0.0.6'
             },
             {
              'DeviceName': 'Tv2',
+             'DeviceModel': 'Amazing Entertainment',
              'ElecConsp': 0.08,
              'CurConsp': 0.08,
-             'status':'on'
+             'status':'on',
+             'ip_address': '127.0.0.7'
             },
             {
              'DeviceName': 'Ac1',
+             'DeviceModel': 'Amazing Cooling',
              'ElecConsp': 0.98,
              'CurConsp': 1.20,
-             'status':'on'
+             'status':'on',
+             'ip_address': '127.0.0.8'
             }
 
 ]
@@ -72,33 +86,11 @@ PowerSources = [
 
 
 
-# # Selects a random item's Status from the list and changes it depending on its state.
-# def randomize_data(interval):
-    # global kawaii
-    # Timer(interval, randomize_data, [interval]).start()
-    # index = randint(0, len(kawaii) - 1)
-    # kawaii[index]['Status'] = 'On' if kawaii[index]['Status'] == 'Off' else 'Off'
-
-# # Change status every second.
-# randomize_data(1)
-
-# A route to return all of the available entries in our catalog.
-@app.route('/api/<string:device_id>', methods=['GET'])
-def api_all(device_id):
-
-   for device in range(len(Devices)):
-       print(Devices[device]['DeviceName'])
-       if Devices[device]['DeviceName'] == device_id:
-           return jsonify(Devices[device])
-
-   return jsonify('No device exsists with this id')
-
-
 ###Used to turn on and off any device 
 @app.route('/api/changestatus/<string:device_id>', methods=['GET'])
 def api_status(device_id):
-   for device in range(len(Devices)):
-       print(Devices[device]['DeviceName'])
+   for device in Devices:
+       
        if Devices[device]['DeviceName'] == device_id:
            if Devices[device]['status'] == 'on':
               Devices[device]['status'] = 'off'
@@ -112,24 +104,9 @@ def api_status(device_id):
 
    return jsonify('No device exsists with this id') 
 ##
-@app.route('/api/energyconsumption/<string:device_id>', methods=['GET'])
-def device_consumption(device_id):
-   for device in range(len(Devices)):
-       print(Devices[device]['DeviceName'])
-       if Devices[device]['DeviceName'] == device_id:
-           return jsonify(Devices[device]['CurConsp'])
-
-   return jsonify('No device exsists with this id')
 
 @app.route('/api/alldevicesconsumption/', methods=['GET'])
 def total_consumption():
     return jsonify(Devices)
-
-@app.route('/api/getEnergySources/', methods=['GET'])
-def energy_sources():
-   for sources in PowerSources:
-       return jsonify(PowerSources)
-
-   return jsonify('No power source present')
 
 app.run()
