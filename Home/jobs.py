@@ -7,3 +7,5 @@ def start():
     scheduler.add_job(BackgroundClass.test_func, 'interval', minutes=1)
     scheduler.add_job(BackgroundClass.power_allot_func, 'interval', minutes=1)
     scheduler.start()
+
+

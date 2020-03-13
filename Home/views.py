@@ -6,8 +6,8 @@ from Home.models import room, plugs , plug_electricity_consumption, energy_gener
 import requests
 
 
-class BackgroundClass:
 
+class BackgroundClass:
     @staticmethod
     def test_func():
         print("HIIIIIIIIIIII")
@@ -50,16 +50,6 @@ class EnergyGeneration(TemplateView):
         return render(request, self.template_name, {"Energy_mode" : energy_mode.objects.all()})
 
 
-def change_status_fn(device):
-    change_status_url = "http://127.0.0.1:5000/api/changestatus/" + device
-    change_status_response = requests.get(change_status_url)
-
-
-
-
-
-
-
 class RoomPage(TemplateView):
     template_name = 'home/room.html'
 
@@ -74,47 +64,37 @@ class RoomPage(TemplateView):
         if not hasattr(plugs_in_room, '__iter__'):
             plugs_in_room = [plugs_in_room]
 
-        devices = []
         consumption = []
+        available_devices = []
+        response = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/").json()
 
-        for d in plugs_in_room:
-            devices.append(d.plug_name)
-        print(devices)
+        for index in range(len(response)):
+            available_devices.append(response[index]['DeviceName'])
 
-        def get_consumption(device):
-            get_consumption_url = "http://127.0.0.1:5000/api/energyconsumption/" + device
-            get_consumption_response = requests.get(get_consumption_url)
-            # print("Consumption of " + device + " is " + str(get_consumption_response.json()))
-            consumption.append(get_consumption_response.json())
+        room_devices = []
+        for plug in plugs_in_room:
+            api_devices = requests.get("http://127.0.0.1:5000/api/energyconsumption/" + plug.plug_name).json()
+            consumption.append(api_devices)
+            room_devices.append(plug.plug_name)
 
-        def live_consumption():
-            for i in range(len(devices)):
-                get_consumption(devices[i])
-            print(consumption)
-            return consumption
-
-        print("test")
-        live_consumption()
-
-
+        m = [x for x in available_devices if x not in room_devices]
+        print(m)
         return render(request, self.template_name, {"Room": room.objects.all(),
                                                     "Room_in": room.objects.get(room_no=kwargs["room_no"]),
                                                     "Plugs": plugs_in_room, "Consumption": consumption},
-
-
                       )
 
+
     def post(self, request, *args, **kwargs):
-        room_no = request.POST.get('room_no')
 
         if 'change_status' in request.POST:
-            change_status_fn(request.POST['change_status'])
+            requests.get("http://127.0.0.1:5000/api/changestatus/" + request.POST['change_status'])
 
         if 'add_device' in request.POST:
             plugs.objects.create(plug_name=request.POST.get('plug_name'),
                                  plug_model_name=request.POST.get('plug_model_name'),
                                  ip_address=request.POST.get('ip_address'),
-                                 room_no=room.objects.get(room_no=room_no))
+                                 room_no=room.objects.get(room_no=request.POST['room_no']))
         if 'remove_device' in request.POST:
             plugs.objects.filter(plug_no=request.POST.get('plug_no')).delete()
 

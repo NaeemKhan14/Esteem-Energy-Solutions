@@ -1,3 +1,4 @@
+
 from django.db import models
 
 # Create your models here.
@@ -43,6 +44,7 @@ class power_generation:
     e_id = models.ForeignKey(energy_generation, default=1, on_delete=models.CASCADE)
     current_power = models.DecimalField(max_digits=20, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
+
 
 
 
