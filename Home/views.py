@@ -2,14 +2,8 @@ from django.contrib.sites import requests
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-<<<<<<< HEAD
 from Home.models import room, plugs , plug_electricity_consumption, energy_generation, energy_mode, battery,power_transaction, power_generation
-=======
-from Home.models import room, plugs
 import requests
-
-
->>>>>>> d7d0554c984f8fec01f9727f2573288987c83b68
 
 
 class BackgroundClass:
@@ -47,15 +41,13 @@ class EnergyGeneration(TemplateView):
     def get(self, request, *args, **kwargs):
         ## Not secure but working solution 
         type_data = request.GET.get('type_data')
-        #plugs.objects.create(type_data)
-        energy_mode.objects.all().delete()
+        
         if type_data != None:
+           energy_mode.objects.all().delete()
            energy_mode.objects.create(mode_id=type_data)
 
-        print(energy_mode.objects.all())
-
-        # Type_data for 
-        return render(request, self.template_name)
+        # Sending current mode active  
+        return render(request, self.template_name, {"Energy_mode" : energy_mode.objects.all()})
 
 
 def change_status_fn(device):
