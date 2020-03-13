@@ -66,6 +66,7 @@ class RoomPage(TemplateView):
 
         consumption = []
         available_devices = []
+        #@Naeem the ip address must come from the database 
         response = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/").json()
 
         for index in range(len(response)):
@@ -73,6 +74,7 @@ class RoomPage(TemplateView):
 
         room_devices = []
         for plug in plugs_in_room:
+            #@Naeem the ip address must come from the database 
             api_devices = requests.get("http://127.0.0.1:5000/api/energyconsumption/" + plug.plug_name).json()
             consumption.append(api_devices)
             room_devices.append(plug.plug_name)
