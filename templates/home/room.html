@@ -3,7 +3,7 @@
 
 <!----------------------------------------------- Graph init ---------------------------------------------------------------->
 
-<body class="" >
+<body class="">
 <div class="wrapper ">
 
     <!-- Side Bar -->
@@ -47,7 +47,7 @@
                                 <a class="dropdown-item" href="#">By hour</a>
                             </div>
 
-                            
+
                         </li>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -88,18 +88,19 @@
                                         <a class="dropdown-item" href="#">Edit</a>
                                         {% load custom_tags %}
                                         {% if request.user|has_group:"Admin" %}
-                                        <form method="POST"> {% csrf_token %}
-                                            <input type="hidden" name="plug_no" value="{{ plugs.plug_no }}"/>
-                                            <input type="submit" name="remove_device" value="Remove Device"
-                                                   class="dropdown-item"/>
-                                        </form>
+                                            <form method="POST"> {% csrf_token %}
+                                                <input type="hidden" name="plug_no" value="{{ plugs.plug_no }}"/>
+                                                <input type="submit" name="remove_device" value="Remove Device"
+                                                       class="dropdown-item"/>
+                                            </form>
                                         {% endif %}
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <canvas id="energy_generation_{{ plugs.plug_name }}" class="energy_chartArea"></canvas>
+                                    <canvas id="energy_generation_{{ plugs.plug_name }}"
+                                            class="energy_chartArea"></canvas>
                                 </div>
                             </div>
 
@@ -107,7 +108,9 @@
                                 <form method="POST">
                                     {% csrf_token %}
 
-                                    <button type="submit" value="{{ plugs.plug_name}}" id="{{ plugs.plug_name }}" name="change_status" class=" btn-outline-danger">Turn ON</button>
+                                    <button type="submit" value="{{ plugs.plug_name }}" id="{{ plugs.plug_name }}"
+                                            name="change_status" class=" btn-outline-danger">Turn ON
+                                    </button>
                                 </form>
 
                             </div>
@@ -116,73 +119,85 @@
                 {% endfor %}
                 {% load custom_tags %}
                 {% if request.user|has_group:"Admin" %}
-                <div class="col-lg-4">
-                    <div class="card card-chart">
-                        <div class="card-header">
-                            <h5 class="card-category"></h5>
-                            <center><h4 class="card-title">ADD DEVICE</h4></center>
-                            <div class="dropdown">
+                    <div class="col-lg-4">
+                        <div class="card card-chart">
+                            <div class="card-header">
+                                <h5 class="card-category"></h5>
+                                <center><h4 class="card-title">ADD DEVICE</h4></center>
+                                <div class="dropdown">
 
-
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
+                            <div class="card-body">
 
-                            <center>
-                                
-                                <button type="button"
-                                        class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
-                                        data-toggle="modal" data-target="#addroom">
-                                    <i class="now-ui-icons ui-1_simple-add"></i>
-                                </button>
-                            </center>
+                                <center>
 
-                            <!-- Modal -->
-                            <div id="addroom" class="modal fade" role="dialog">
-                                <form method="POST">{% csrf_token %}
-                                    <!--Hidden input-->
-                                    <input type="hidden" name="room_no" value="{{ Room_in.room_no }}"/>
+                                    <button type="button"
+                                            class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                                            data-toggle="modal" data-target="#addroom">
+                                        <i class="now-ui-icons ui-1_simple-add"></i>
+                                    </button>
+                                </center>
 
-                                    <div class="modal-dialog">
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <center><h4 class="modal-title">Add Device</h4></center>
+                                <!-- Modal -->
+                                <div id="addroom" class="modal fade" role="dialog">
+                                    <form method="POST">{% csrf_token %}
+                                        <!--Hidden input-->
+                                        <input type="hidden" name="room_no" value="{{ Room_in.room_no }}"/>
+
+                                        <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Add Device</h4>
+                                                </div>
+                                                {% if available_devices %}
+                                                    <h4 class="modal-title">Available Devices</h4>
+
+                                                        <form method="POST">
+                                                            {% for device in available_devices %}
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="{{ device.0 }}_ip_address" value="{{ device.1 }}" />
+                                                            <input type="submit" name="new_device" value="{{ device.0 }}" />
+                                                        {% endfor %}
+                                                        </form>
+
+
+                                                {% endif %}
+                                                <div class="modal-body">
+                                                    <p>
+                                                        <label>Device Name </label>
+                                                        <input type="text" id="device_name" name="plug_name"/>
+                                                    </p>
+                                                    <p>
+                                                        <label>Device Model </label>
+                                                        <input type="text" id="plug_model_name" name="plug_model_name"/>
+                                                    </p>
+                                                    <p>
+                                                        <label>Ip Address </label>
+                                                        <input type="text" id="ip_address" name="ip_address"/>
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="submit" name="add_device" value="Confirm"
+                                                           class="btn btn-default"/>
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    <label>Device Name </label>
-                                                    <input type="text" id="device_name" name="plug_name"/>
-                                                </p>
-                                                <p>
-                                                    <label>Device Model </label>
-                                                    <input type="text" id="plug_model_name" name="plug_model_name"/>
-                                                </p>
-                                                <p>
-                                                    <label>Ip Address </label>
-                                                    <input type="text" id="ip_address" name="ip_address"/>
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <input type="submit" name="add_device" value="Confirm"
-                                                       class="btn btn-default"/>
-                                                <button type="button" class="btn btn-default"
-                                                        data-dismiss="modal">Close
-                                                </button>
-                                            </div>
+
                                         </div>
-
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
+                            <!-- <div class="card-footer">
+                                <div class="stats">
+                                   Status: <span style="font-weight: 700; color: green;">Active</span>
+                                </div>
+                            </div> -->
                         </div>
-                        <!-- <div class="card-footer">
-                            <div class="stats">
-                               Status: <span style="font-weight: 700; color: green;">Active</span>
-                            </div>
-                        </div> -->
                     </div>
-                </div>
                 {% endif %}
 
             </div>
@@ -192,204 +207,206 @@
 
             var device_id = [];
 
-                {% for plugs in Plugs %}
+            {% for plugs in Plugs %}
 
 
 
 
-                 var device_name = "{{ plugs.plug_name }}";
-                 device_id.push(device_name);
-                 getcurrentStatus(device_name);
+                var device_name = "{{ plugs.plug_name }}";
+                device_id.push(device_name);
+                getcurrentStatus(device_name);
 
-                {% endfor %}
+            {% endfor %}
             console.log(device_id);
 
 
-                async function getcurrentStatus(device){
+            async function getcurrentStatus(device) {
 
-                    var api_url = 'http://127.0.0.1:5000/api/' + device;
-                    var response = await fetch(api_url);
-                    var data = await response.json();
-                    var currentstatus = data.status;
-                    console.log(device + " : " + currentstatus)
-                    var x = document.getElementById(device);
+                var api_url = 'http://127.0.0.1:5000/api/' + device;
+                var response = await fetch(api_url);
+                var data = await response.json();
+                var currentstatus = data.status;
+                console.log(device + " : " + currentstatus)
+                var x = document.getElementById(device);
 
 
-                    if (currentstatus === "off"){
-                        x.innerHTML = "Turn ON";
-                    } else {
-                        x.innerHTML = "Turn OFF";
-
-                    }
+                if (currentstatus === "off") {
+                    x.innerHTML = "Turn ON";
+                } else {
+                    x.innerHTML = "Turn OFF";
 
                 }
+
+            }
 
 
             $(document).ready(function () {
                 var consumptionn = "{{ Consumption }}";
+                console.log(consumptionn)
                 var dataLabel = JSON.parse(consumptionn);
                 {##}
                 {#for (let i = 0; i < consumptionn; i++) {#}
                 {#    #}
                 {#}#}
 
-                // Javascript method's body can be found in assets/js/demos.js
-                // demo.initDashboardPageCharts();
+                    // Javascript method's body can be found in assets/js/demos.js
+                    // demo.initDashboardPageCharts();
 
-                // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
+                    // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
 
-               // All device_id here
-
-
-                var ctx = document.getElementById('EnergyChart').getContext("2d");
-                chartColor = "#FFFFFF";
-
-                var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-                gradientStroke.addColorStop(0, '#80b6f4');
-                gradientStroke.addColorStop(1, chartColor);
-
-                var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
-                gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-                gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
-
-                var myChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: device_id,
-                        datasets: [{
-                            label: 'Current Consumption',
-                            data: dataLabel,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        layout: {
-                            padding: {
-                                left: 20,
-                                right: 20,
-                                top: 0,
-                                bottom: 0
-                            }
-                        },
-                        maintainAspectRatio: false,
-                        tooltips: {
-                            backgroundColor: '#fff',
-                            titleFontColor: '#333',
-                            bodyFontColor: '#666',
-                            bodySpacing: 4,
-                            xPadding: 12,
-                            mode: "nearest",
-                            intersect: 0,
-                            position: "nearest"
-                        },
-                        legend: {
-                            position: "top",
-                            fillStyle: "",
-                            display: true,
-                        },
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    fontColor: "rgba(255,255,255,0.4)",
-                                    fontStyle: "bold",
-                                    beginAtZero: true,
-                                    maxTicksLimit: 5,
-                                    padding: 10
-                                },
-                                gridLines: {
-                                    drawTicks: true,
-                                    drawBorder: false,
-                                    display: true,
-                                    color: "rgba(255,255,255,0.1)",
-                                    zeroLineColor: "transparent"
-                                }
-
-                            }],
-                            xAxes: [{
-                                gridLines: {
-                                    zeroLineColor: "transparent",
-                                    display: false,
-
-                                },
-                                ticks: {
-                                    padding: 10,
-                                    fontColor: "rgba(255,255,255,0.4)",
-                                    fontStyle: "bold"
-                                }
-                            }]
-                        }
-                    }
-
-                });
-
-                var cardStatsMiniLineColor = "#fff",
-                    cardStatsMiniDotColor = "#fff";
-
-                //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
-
-                {% for plugs in Plugs %}
-
-                 var device_name = "{{ plugs.plug_name }}";
-                 chart_devices(device_name);
-
-                 {% endfor %}
+                    // All device_id here
 
 
-                async function chart_devices(device) {
+                    var ctx = document.getElementById('EnergyChart').getContext("2d");
+                    chartColor = "#FFFFFF";
 
-                    var device_id = "energy_generation_" + device;
-                    var ctx1 = document.getElementById(device_id).getContext("2d");
-
-                    gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
+                    var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
                     gradientStroke.addColorStop(0, '#80b6f4');
                     gradientStroke.addColorStop(1, chartColor);
 
-                    gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
-                    // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-                    //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
+                    var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
+                    gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+                    gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
 
-                    var myChart1 = new Chart(ctx1, {
-                        type: 'line',
-                        responsive: true,
+                    var myChart = new Chart(ctx, {
+                        type: 'doughnut',
                         data: {
-                            labels: ["1:00", "2:00", "4:00", "5:00"],
+                            labels: device_id,
                             datasets: [{
-                                label: "Lamp KwH",
-                                borderColor: "#f96332",
-                                pointBorderColor: "#FFF",
-                                pointBackgroundColor: "#f96332",
-                                pointBorderWidth: 2,
-                                pointHoverRadius: 4,
-                                pointHoverBorderWidth: 1,
-                                pointRadius: 4,
-                                fill: true,
-                                backgroundColor: gradientFill,
-                                borderWidth: 2,
-                                data: [10, 40, 30, 5]        // Data point
-                            }
-                            ]
+                                label: 'Current Consumption',
+                                data: dataLabel,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
                         },
-                        options: gradientChartOptionsConfiguration
-                    });
-                }
+                        options: {
+                            layout: {
+                                padding: {
+                                    left: 20,
+                                    right: 20,
+                                    top: 0,
+                                    bottom: 0
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            tooltips: {
+                                backgroundColor: '#fff',
+                                titleFontColor: '#333',
+                                bodyFontColor: '#666',
+                                bodySpacing: 4,
+                                xPadding: 12,
+                                mode: "nearest",
+                                intersect: 0,
+                                position: "nearest"
+                            },
+                            legend: {
+                                position: "top",
+                                fillStyle: "",
+                                display: true,
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        fontColor: "rgba(255,255,255,0.4)",
+                                        fontStyle: "bold",
+                                        beginAtZero: true,
+                                        maxTicksLimit: 5,
+                                        padding: 10
+                                    },
+                                    gridLines: {
+                                        drawTicks: true,
+                                        drawBorder: false,
+                                        display: true,
+                                        color: "rgba(255,255,255,0.1)",
+                                        zeroLineColor: "transparent"
+                                    }
 
-            });
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        zeroLineColor: "transparent",
+                                        display: false,
+
+                                    },
+                                    ticks: {
+                                        padding: 10,
+                                        fontColor: "rgba(255,255,255,0.4)",
+                                        fontStyle: "bold"
+                                    }
+                                }]
+                            }
+                        }
+
+                    });
+
+                    var cardStatsMiniLineColor = "#fff",
+                        cardStatsMiniDotColor = "#fff";
+
+                    //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
+
+                    {% for plugs in Plugs %}
+
+                        var device_name = "{{ plugs.plug_name }}";
+                        chart_devices(device_name);
+
+                    {% endfor %}
+
+
+                    async function chart_devices(device) {
+
+                        var device_id = "energy_generation_" + device;
+                        var ctx1 = document.getElementById(device_id).getContext("2d");
+
+                        gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
+                        gradientStroke.addColorStop(0, '#80b6f4');
+                        gradientStroke.addColorStop(1, chartColor);
+
+                        gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
+                        // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+                        //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
+
+                        var myChart1 = new Chart(ctx1, {
+                            type: 'line',
+                            responsive: true,
+                            data: {
+                                labels: ["1:00", "2:00", "4:00", "5:00"],
+                                datasets: [{
+                                    label: "Lamp KwH",
+                                    borderColor: "#f96332",
+                                    pointBorderColor: "#FFF",
+                                    pointBackgroundColor: "#f96332",
+                                    pointBorderWidth: 2,
+                                    pointHoverRadius: 4,
+                                    pointHoverBorderWidth: 1,
+                                    pointRadius: 4,
+                                    fill: true,
+                                    backgroundColor: gradientFill,
+                                    borderWidth: 2,
+                                    data: [10, 40, 30, 5]        // Data point
+                                }
+                                ]
+                            },
+                            options: gradientChartOptionsConfiguration
+                        });
+                    }
+
+                }
+            );
         </script>
 
 {% include "home/partials/footer.html" %}
