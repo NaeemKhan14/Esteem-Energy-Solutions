@@ -148,7 +148,9 @@ DEFAULT_FROM_EMAIL = 'Esteem Power Solutions <noreply@esteem.com>'
 # Login settings
 
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 LOGIN_URL = 'accounts/login/'
+
 
 # List of pages that can be accessed without being logged in
 
