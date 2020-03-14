@@ -103,10 +103,7 @@ class RoomPage(TemplateView):
             requests.get("http://127.0.0.1:5000/api/changestatus/" + values[1])
             plug_obj = plugs.objects.get(ip_address=values[0], plug_name=values[1])
 
-            if plug_obj.status is True:
-                plug_obj.status = False
-            else:
-                plug_obj.status = True
+            plug_obj.status = False if plug_obj.status else True
             plug_obj.save()
 
         if 'add_device' in request.POST:
