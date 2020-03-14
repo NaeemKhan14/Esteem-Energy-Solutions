@@ -72,12 +72,12 @@
         </div>
         <div class="content">
             <div class="row">
-                {% for plugs in Plugs %}
+                {% for plug in Plugs %}
                     <div class="col-lg-4">
                         <div class="card card-chart">
                             <div class="card-header">
                                 <h5 class="card-category"></h5>
-                                <h4 class="card-title">{{ plugs.plug_name }}</h4>
+                                <h4 class="card-title">{{ plug.plug_name }}</h4>
                                 <div class="dropdown">
                                     <button type="button"
                                             class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
@@ -89,7 +89,7 @@
                                         {% load custom_tags %}
                                         {% if request.user|has_group:"Admin" %}
                                             <form method="POST"> {% csrf_token %}
-                                                <input type="hidden" name="plug_no" value="{{ plugs.plug_no }}"/>
+                                                <input type="hidden" name="plug_no" value="{{ plug.plug_no }}"/>
                                                 <input type="submit" name="remove_device" value="Remove Device"
                                                        class="dropdown-item"/>
                                             </form>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <canvas id="energy_generation_{{ plugs.plug_name }}"
+                                    <canvas id="energy_generation_{{ plug.plug_name }}"
                                             class="energy_chartArea"></canvas>
                                 </div>
                             </div>
@@ -108,8 +108,8 @@
                                 <form method="POST">
                                     {% csrf_token %}
 
-                                    <button type="submit" value="{{ plugs.plug_name }}" id="{{ plugs.plug_name }}"
-                                            name="change_status" class=" btn-outline-danger">Turn ON
+                                    <button type="submit" value="{{ plug.ip_address }},{{ plug.plug_name }}"
+                                            name="change_status" class=" btn-outline-danger">{% if plug.status %} Turn Off{% else %}Turn On{% endif %}
                                     </button>
                                 </form>
 
@@ -219,25 +219,6 @@
             {% endfor %}
             console.log(device_id);
 
-
-            async function getcurrentStatus(device) {
-
-                var api_url = 'http://127.0.0.1:5000/api/' + device;
-                var response = await fetch(api_url);
-                var data = await response.json();
-                var currentstatus = data.status;
-                console.log(device + " : " + currentstatus)
-                var x = document.getElementById(device);
-
-
-                if (currentstatus === "off") {
-                    x.innerHTML = "Turn ON";
-                } else {
-                    x.innerHTML = "Turn OFF";
-
-                }
-
-            }
 
 
             $(document).ready(function () {
