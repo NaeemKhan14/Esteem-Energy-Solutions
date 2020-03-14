@@ -207,23 +207,13 @@
             $(document).ready(function () {
                 var consumptionn = "{{ Consumption }}";
                 var device_id = [];
-                console.log(consumptionn);
                 var dataLabel = JSON.parse(consumptionn);
-                {##}
-                {#for (let i = 0; i < consumptionn; i++) {#}
-                {#    #}
-                {#}#}
-
                     // Javascript method's body can be found in assets/js/demos.js
                     // demo.initDashboardPageCharts();
-
                     // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
-
                     // All device_id here
-
-
                     var ctx = document.getElementById('EnergyChart').getContext("2d");
-                    chartColor = "#FFFFFF";
+                    var chartColor = "#FFFFFF";
 
                     var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
                     gradientStroke.addColorStop(0, '#80b6f4');
@@ -324,9 +314,9 @@
 
                     //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
 
-                    {% for plugs in Plugs %}
-
-                        var device_name = "{{ plugs.plug_name }}";
+                    {% for plug in Plugs %}
+                        "{{ plug.plug_name }}"
+                        var device_name = "{{ plug.plug_name }}";
                         chart_devices(device_name);
 
                     {% endfor %}
