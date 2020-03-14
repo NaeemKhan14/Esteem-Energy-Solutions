@@ -206,8 +206,22 @@
         <script>
             $(document).ready(function () {
                 var consumptionn = "{{ Consumption }}";
-                var device_id = [];
+                console.log(consumptionn);
+
                 var dataLabel = JSON.parse(consumptionn);
+
+                var deviceLabel = [];
+
+                {% for plugs in Plugs %}
+                    var device_name = "{{ plugs.plug_name }}";
+                    deviceLabel.push(device_name)
+                {% endfor %}
+
+                {##}
+                {#for (let i = 0; i < consumptionn; i++) {#}
+                {#    #}
+                {#}#}
+
                     // Javascript method's body can be found in assets/js/demos.js
                     // demo.initDashboardPageCharts();
                     // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
@@ -226,7 +240,7 @@
                     var myChart = new Chart(ctx, {
                         type: 'doughnut',
                         data: {
-                            labels: device_id,
+                            labels: deviceLabel,
                             datasets: [{
                                 label: 'Current Consumption',
                                 data: dataLabel,
