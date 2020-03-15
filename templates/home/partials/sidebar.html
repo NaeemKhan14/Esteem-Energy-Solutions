@@ -1,13 +1,13 @@
-<div class="sidebar" data-color="black">
+<div class="sidebar" data-color="red">
     <!--
 Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
 -->
     <div class="logo">
         <a href="/" class="simple-text logo-mini">
-
+            <font size="5.5">ES</font>
         </a>
         <a href="/" class="simple-text logo-normal">
-            Esteem
+            <font size="3.8">Esteem Solutions</font>
         </a>
     </div>
     <div class="sidebar-wrapper" id="sidebar-wrapper">
@@ -15,20 +15,26 @@ Tip 1: You can change the color of the sidebar using: data-color="blue | green |
             <li>
                 <a href="/">
 
-                    <p>Main page</p>
+                    <p><font size="2.5">Main page</font></p>
                 </a>
             </li>
             <li>
                 <a href="/energy">
 
-                    <p>Energy generation</p>
+                    <p><font size="2.5">Energy Generation</font></p>
+                </a>
+            </li>
+            <li>
+                <a href="/energy">
+
+                    <p><font size="2.5">View Details</font></p>
                 </a>
             </li>
             {% for rooms in Room %}
             <li>
                 <a href="/energy">
 
-                    <p>{{ rooms.room_name }}</p>
+                    <font size="2.5">{{ rooms.room_name }}</font></p>
                 </a>
             </li>
             {% endfor %}
