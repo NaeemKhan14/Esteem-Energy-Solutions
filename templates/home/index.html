@@ -9,9 +9,9 @@
     <!-- Side Bar -->
     {% include "home/partials/sidebar.html" %}
 
-    <div class="main-panel" id="main-panel">
+    <div class="main-panel" id="main-panel" data-color="green">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
+        <nav class="navbar navbar-expand-lg navbar-transparent  bg-secondary  navbar-absolute">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
                     <div class="navbar-toggle">
@@ -21,7 +21,9 @@
                             <span class="navbar-toggler-bar bar3"></span>
                         </button>
                     </div>
-                    <a class="navbar-brand" href="#pablo">Electricity Used</a>
+                    <a class="navbar-brand" href="#pablo">
+                            <font size="5">Electricity Used</font>
+                    </a>
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
                         aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,13 +40,13 @@
                                aria-haspopup="true" aria-expanded="false">
 
                                 <p>
-                                    View by
+                                        <font size="3">Consumption Period</font>
                                 </p>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="#">By week </a>
-                                <a class="dropdown-item" href="#">By day</a>
-                                <a class="dropdown-item" href="#">By hour</a>
+                                <a class="dropdown-item" href="#">Weekly</a>
+                                <a class="dropdown-item" href="#">Daily</a>
+                                <a class="dropdown-item" href="#">Hourly</a>
                             </div>
 
                             
@@ -59,7 +61,7 @@
                                 </p>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="/admin/logout/">Logout </a>
+                                <a class="dropdown-item" href="/accounts/logout/">Logout </a>
                             </div>
                         </li>
                     </ul>
@@ -68,7 +70,7 @@
         </nav>
         <!-- End Navbar -->
         <div class="panel-header panel-header-lg">
-            <canvas id="bigDashboardChart"></canvas>
+            <canvas id="bigDashboardChart"> </canvas>
         </div>
         <div class="content">
             <div class="row">
