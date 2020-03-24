@@ -76,11 +76,16 @@
                             <div class="card-body">
                                 <p>Uses power from unless battery charge 100% (Use only when frequent power cuts). 
                                 </p>
-                                <% if Energy_mode.%>
+                                {% for obj in Energy %}
+                                {{obj}}
+                                {% endfor %}
+                                {% load custom_tags %}
+                                {% if Energy_mode.mode_id == "e1"%}
                                 <button type="button"
                                         class=" btn-outline-default" id="e1" onclick="window.location.href = '/energy?type_data=e1'">
                                         Enable
                                     </button>
+                                {% endif %}
                             </div>
                             
                         </div>

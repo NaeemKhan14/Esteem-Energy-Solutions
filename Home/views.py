@@ -90,6 +90,7 @@ class RoomPage(TemplateView):
     def post(self, request, *args, **kwargs):
 
         if 'change_status' in request.POST:
+            #@Naeem the ip address must come from the database 
             requests.get("http://127.0.0.1:5000/api/changestatus/" + request.POST['change_status'])
 
         if 'add_device' in request.POST:
