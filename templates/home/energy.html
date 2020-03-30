@@ -84,16 +84,23 @@
                             <div class="card-body">
                                 <p>Uses power from unless battery charge 100% (Use only when frequent power cuts). 
                                 </p>
-                                {% for obj in Energy %}
-                                {{obj}}
-                                {% endfor %}
                                 {% load custom_tags %}
-                                {% if Energy_mode.mode_id == "e1"%}
+                                {% for obj in Energy_mode %} 
+                                {% if obj.mode_id == "e1"%}
+                                <button type="button"
+                                class=" btn-outline-danger" id="e2">
+                                Disable
+                               </button>
+                                {% endif %}
+                                {% if obj.mode_id != "e1"%}
                                 <button type="button"
                                         class=" btn-outline-default" id="e1" onclick="window.location.href = '/energy?type_data=e1'">
                                         Enable
-                                    </button>
+                                </button>
                                 {% endif %}
+
+                                {% endfor %}
+                                
                             </div>
                             
                         </div>
@@ -112,12 +119,24 @@
                                 <p>Powered from solar panel and battery (Recommeded). 
                                 </p>
                                 
+                                {% load custom_tags %}
+                                {% for obj in Energy_mode %} 
+                                {% if obj.mode_id == "e2"%}
                                 <button type="button"
-                                        class=" btn-outline-danger" id="e2">
-                                        Disable
-                                    </button>
+                                class=" btn-outline-danger" id="e2">
+                                Disable
+                               </button>
+                                {% endif %}
+                                {% if obj.mode_id != "e2"%}
+                                <button type="button"
+                                        class=" btn-outline-default" id="e2" onclick="window.location.href = '/energy?type_data=e2'">
+                                        Enable
+                                </button>
+                                {% endif %}
+
+                                {% endfor %}
+                                
                             </div>
-                            
                         </div>
                     </div>
 
@@ -133,10 +152,22 @@
                                 <p>Power Pulled from Grid (Not Recommeded). 
                                 </p>
                                 
+                                {% load custom_tags %}
+                                {% for obj in Energy_mode %} 
+                                {% if obj.mode_id == "e3"%}
                                 <button type="button"
-                                        class=" btn-outline-default " id="e3">
+                                class=" btn-outline-danger" id="e3">
+                                Disable
+                               </button>
+                                {% endif %}
+                                {% if obj.mode_id != "e3"%}
+                                <button type="button"
+                                        class=" btn-outline-default" id="e3" onclick="window.location.href = '/energy?type_data=e3'">
                                         Enable
-                                    </button>
+                                </button>
+                                {% endif %}
+
+                                {% endfor %}
                             </div>
                             
                         </div>
