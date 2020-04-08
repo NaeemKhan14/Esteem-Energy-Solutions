@@ -329,14 +329,28 @@
                     //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
 
                     {% for plug in Plugs %}
-                        "{{ plug.plug_name }}"
                         var device_name = "{{ plug.plug_name }}";
-                        chart_devices(device_name);
+                    //     jQuery.get('file://templates/home/testfile.json', function(data) {
+                    //                 alert(data);
+                                
+                    //             console.log(data); 
+             
+                    //     var values = [];
+                    //     var time = [];
+                    //     console.log(data.array[0].time);            
+                    //     for(var i = 0;i < data.array.length;i++){
+                    //         console.log(data.array[i]);
+                    //         values.push(data.array[i].value);
+                    //         time.push(data.array[i].time);
+                    //     };
+
+                    //     chart_devices(device_name, values, time);
+                    // });
 
                     {% endfor %}
 
-
-                    async function chart_devices(device) {
+                          
+                    async function chart_devices(device, values, time) {
 
                         var device_id = "energy_generation_" + device;
                         var ctx1 = document.getElementById(device_id).getContext("2d");
@@ -353,7 +367,7 @@
                             type: 'line',
                             responsive: true,
                             data: {
-                                labels: ["1:00", "2:00", "4:00", "5:00"],
+                                labels: time,
                                 datasets: [{
                                     label: "Lamp KwH",
                                     borderColor: "#f96332",
@@ -366,7 +380,7 @@
                                     fill: true,
                                     backgroundColor: gradientFill,
                                     borderWidth: 2,
-                                    data: [10, 40, 30, 5]        // Data point
+                                    data: values       // Data point
                                 }
                                 ]
                             },
