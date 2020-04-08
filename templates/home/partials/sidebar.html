@@ -24,15 +24,9 @@ Tip 1: You can change the color of the sidebar using: data-color="blue | green |
                     <p><font size="2.5">Energy Generation</font></p>
                 </a>
             </li>
-            <li>
-                <a href="/energy">
-
-                    <p><font size="2.5">View Details</font></p>
-                </a>
-            </li>
             {% for rooms in Room %}
             <li>
-                <a href="/energy">
+                <a href="/room/{{ rooms.room_no }}">
 
                     <font size="2.5">{{ rooms.room_name }}</font></p>
                 </a>

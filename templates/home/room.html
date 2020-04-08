@@ -109,7 +109,7 @@
                                     {% csrf_token %}
 
                                     <button type="submit" value="{{ plug.ip_address }},{{ plug.plug_name }}"
-                                            name="change_status" class=" btn-outline-danger">{% if plug.status %} Turn Off{% else %}Turn On{% endif %}
+                                            name="change_status" class=" btn-outline-danger">{% if plug.status %} Turn On{% else %}Turn Off{% endif %}
                                     </button>
                                 </form>
 

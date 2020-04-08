@@ -16,8 +16,21 @@ class BackgroundClass:
     def power_allot_func():
         # check power mode
         # Total power consumption by house
-        # Do according transaction 
+        # Do according transaction
         print("lol")
+
+    @staticmethod
+    def device_consumption():
+        api_devices_list = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/").json()
+        for device in api_devices_list:
+            print(device['status'])
+            if device['status'] == 'on':
+                try:
+                    plug_no=plugs.objects.get(plug_name=device['DeviceName'])
+                    plug_electricity_consumption.objects.create(plug_no=plug_no,Watt=device['ElecConsp'])
+                except plugs.DoesNotExist:
+                    plug_no = None
+
 
 
 class HomePage(TemplateView):
@@ -47,7 +60,7 @@ class EnergyGeneration(TemplateView):
             energy_mode.objects.all().delete()
             energy_mode.objects.create(mode_id=type_data)
 
-        # Sending current mode active  
+        # Sending current mode active
         return render(request, self.template_name, {"Energy_mode": energy_mode.objects.all()})
 
 
@@ -78,6 +91,16 @@ class RoomPage(TemplateView):
             # that means it is a new device and we show it as a list in front end to be added.
             if not plugs.objects.filter(ip_address=device['ip_address']).exists():
                 available_devices.append([device['DeviceName'], device['ip_address']])
+
+
+        #Line graph for plugs hourly data
+        plug_id = request.GET.get('plug_id')
+
+        #We start with default hourly data
+        
+
+
+
 
         return render(request, self.template_name, {"Room": room.objects.all(),
                                                     "Room_in": room.objects.get(room_no=kwargs["room_no"]),
