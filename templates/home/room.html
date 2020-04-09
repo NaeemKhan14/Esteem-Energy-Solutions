@@ -329,28 +329,42 @@
                     //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
 
                     {% for plug in Plugs %}
-                        var device_name = "{{ plug.plug_name }}";
-                    //     jQuery.get('file://templates/home/testfile.json', function(data) {
-                    //                 alert(data);
-                                
-                    //             console.log(data); 
-             
-                    //     var values = [];
-                    //     var time = [];
-                    //     console.log(data.array[0].time);            
-                    //     for(var i = 0;i < data.array.length;i++){
-                    //         console.log(data.array[i]);
-                    //         values.push(data.array[i].value);
-                    //         time.push(data.array[i].time);
-                    //     };
 
-                    //     chart_devices(device_name, values, time);
-                    // });
+                       //Still working on it
+                        var device_name = "{{ plug.plug_name }}";
+
+                        // Creating the XMLHttpRequest object
+                        var request = new XMLHttpRequest();
+
+                        // Instantiating the request object
+                        request.open("GET", '/plug?plug_id='+device_name);
+
+                        request.onreadystatechange = function() {
+                              // Check if the request is compete and was successful
+                            if(this.readyState === 4 && this.status === 200) {
+                              // Inserting the response from server into an HTML element
+
+                            for(var i = 0;i < data.length;i++){
+                                data = this.responseText;
+                                var time_range = data[i].hour + "-" + data[i].hour + ":59";
+                                console.log(time_range)
+                                console.log(data[i].Watts);
+                                values.push(data[i].Watts);
+                                time.push(time_range);
+                            }
+                                console.log('here');
+                                chart_devices(device_name, values, time);
+                            }
+                        };
+
+                        request.send();
+
+
 
                     {% endfor %}
 
-                          
-                    async function chart_devices(device, values, time) {
+
+                   async function chart_devices(device, values, time) {
 
                         var device_id = "energy_generation_" + device;
                         var ctx1 = document.getElementById(device_id).getContext("2d");

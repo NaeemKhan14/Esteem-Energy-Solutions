@@ -1,10 +1,11 @@
 from django.contrib.sites import requests
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from Home.models import room, plugs, plug_electricity_consumption, energy_generation, energy_mode, battery, \
     power_transaction, power_generation
 import requests
+import datetime
 
 
 class BackgroundClass:
@@ -93,15 +94,6 @@ class RoomPage(TemplateView):
                 available_devices.append([device['DeviceName'], device['ip_address']])
 
 
-        #Line graph for plugs hourly data
-        plug_id = request.GET.get('plug_id')
-
-        #We start with default hourly data
-        
-
-
-
-
         return render(request, self.template_name, {"Room": room.objects.all(),
                                                     "Room_in": room.objects.get(room_no=kwargs["room_no"]),
                                                     "Plugs": plugs_in_room, "Consumption": consumption,
@@ -138,3 +130,42 @@ class RoomPage(TemplateView):
             plugs.objects.filter(plug_no=request.POST.get('plug_no')).delete()
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+class Plugs(TemplateView):
+   def get(self, request, *args, **kwargs):
+       #Line graph for plugs hourly data
+       plug_id = request.GET.get('plug_id')
+       print(plug_id)
+
+       #We start with default hourly data
+       if plug_id != None:
+           now = datetime.datetime.now()
+           time = now.time()
+           day = now.day
+           month = now.month
+           year = now.year
+           hour=time.hour
+           print(hour)
+           hourly_data = []
+           plug = plugs.objects.get(plug_name=plug_id)
+
+           #sum for every hour
+           for i in range(hour):
+              sum = 0
+              l = (list(plug_electricity_consumption.objects.filter(plug_no=plug,timestamp__day=day,timestamp__month=month,timestamp__year=year,timestamp__hour=i)))
+              for j in l:
+                  sum += j.Watt
+                  print(j.Watt)
+              hourly_data.append({'hour':i,'Watts':sum})
+           print(hourly_data)
+           return JsonResponse(hourly_data, safe=False)
+
+
+       data = {
+        'name': 'Vitor',
+        'location': 'Finland',
+        'is_active': True,
+        'count': 28
+       }
+
+       return response_json
