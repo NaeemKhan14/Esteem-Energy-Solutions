@@ -71,7 +71,7 @@ class RoomPage(TemplateView):
     def get(self, request, *args, **kwargs):
         # Try and except for smart plugs in the room
         try:
-            plugs_in_room = plugs.objects.filter(room_no=kwargs["room_no"])
+            plugs_in_room = plugs.objects.filter(room_no=kwargs["room_no"]).order_by("plug_no")
         except plugs.DoesNotExist:
             plugs_in_room = []
 
@@ -115,11 +115,14 @@ class RoomPage(TemplateView):
 
         if 'change_status' in request.POST:
             values = request.POST['change_status'].split(',')
+            print("Old values befor pressing button", values)
             requests.get("http://127.0.0.1:5000/api/changestatus/" + values[1])
             plug_obj = plugs.objects.get(ip_address=values[0], plug_name=values[1])
 
             plug_obj.status = False if plug_obj.status else True
             plug_obj.save()
+            print("Button pressed, new values", plug_obj.status)
+
 
         if 'add_device' in request.POST:
             plugs.objects.create(plug_name=request.POST['plug_name'],
