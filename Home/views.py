@@ -137,6 +137,8 @@ class Plugs(TemplateView):
        plug_id = request.GET.get('plug_id')
        print(plug_id)
 
+
+
        #We start with default hourly data
        if plug_id != None:
            now = datetime.datetime.now()
@@ -150,7 +152,7 @@ class Plugs(TemplateView):
            plug = plugs.objects.get(plug_name=plug_id)
 
            #sum for every hour
-           for i in range(hour):
+           for i in range(hour+1):
               sum = 0
               l = (list(plug_electricity_consumption.objects.filter(plug_no=plug,timestamp__day=day,timestamp__month=month,timestamp__year=year,timestamp__hour=i)))
               for j in l:
@@ -160,12 +162,4 @@ class Plugs(TemplateView):
            print(hourly_data)
            return JsonResponse(hourly_data, safe=False)
 
-
-       data = {
-        'name': 'Vitor',
-        'location': 'Finland',
-        'is_active': True,
-        'count': 28
-       }
-
-       return response_json
+       return JsonResponse("{'error':'This plug does not exist in the database'}", safe=False)

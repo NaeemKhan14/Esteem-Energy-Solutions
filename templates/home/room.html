@@ -326,42 +326,41 @@
                     var cardStatsMiniLineColor = "#fff",
                         cardStatsMiniDotColor = "#fff";
 
-                    //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
-
-                    {% for plug in Plugs %}
-
-                       //Still working on it
-                        var device_name = "{{ plug.plug_name }}";
-
-                        // Creating the XMLHttpRequest object
-                        var request = new XMLHttpRequest();
-
-                        // Instantiating the request object
-                        request.open("GET", '/plug?plug_id='+device_name);
-
-                        request.onreadystatechange = function() {
-                              // Check if the request is compete and was successful
-                            if(this.readyState === 4 && this.status === 200) {
-                              // Inserting the response from server into an HTML element
-
-                            for(var i = 0;i < data.length;i++){
-                                data = this.responseText;
-                                var time_range = data[i].hour + "-" + data[i].hour + ":59";
-                                console.log(time_range)
-                                console.log(data[i].Watts);
-                                values.push(data[i].Watts);
-                                time.push(time_range);
-                            }
-                                console.log('here');
-                                chart_devices(device_name, values, time);
-                            }
-                        };
-
-                        request.send();
+                    //-------------------------------------------- Hourly data for graph -----------------------------------------------------
+                    // Adding all plug names in that room in a list
+                    var plug = [{% for x in Plugs %}'{{ x.plug_name|escapejs }}',{% endfor %}];
 
 
+                   /*
+                   Iterating through the plug lost and calling a API from the main server to get
+                   hourly data.
+                   The api call is not async
+                   */
+                   
+                    for(var i = 0; i < plug.length;i++){
+                      console.log(plug[i]);
 
-                    {% endfor %}
+                      jQuery.ajax({
+                         url: '/plug?plug_id='+plug[i],
+                         success: function (data) {
+                           values = [];
+                           time = [];
+                           for(var j = 0;j < data.length;j++){
+                               var time_range = data[j].hour + "-" + data[j].hour + ":59";
+                               console.log(time_range)
+                               console.log(data[j].Watts);
+                               values.push(data[j].Watts);
+                               time.push(time_range);
+                           }
+                               console.log(i);
+                               //console.log(plug[i])
+                               chart_devices(plug[i], values, time);
+                         },
+                         async: false
+                         });
+
+                       }
+
 
 
                    async function chart_devices(device, values, time) {
@@ -383,7 +382,7 @@
                             data: {
                                 labels: time,
                                 datasets: [{
-                                    label: "Lamp KwH",
+                                    label: device+" KwH",
                                     borderColor: "#f96332",
                                     pointBorderColor: "#FFF",
                                     pointBackgroundColor: "#f96332",
