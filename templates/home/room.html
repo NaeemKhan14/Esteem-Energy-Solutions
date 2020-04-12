@@ -109,7 +109,11 @@
                                     {% csrf_token %}
 
                                     <button type="submit" value="{{ plug.ip_address }},{{ plug.plug_name }}"
+<<<<<<< HEAD
                                             name="change_status" class=" btn-outline-danger">{% if plug.status %} On{% else %}Off{% endif %}
+=======
+                                            name="change_status" class=" btn-outline-danger">{% if plug.status %} Turn Off{% else %}Turn On{% endif %}
+>>>>>>> 1792a8bd6873fba3259bc113fa85eb425a5a0730
                                     </button>
                                     {{ plug.status }}
                                 </form>
@@ -210,6 +214,7 @@
                 console.log(consumptionn);
 
                 var dataLabel = JSON.parse(consumptionn);
+                console.log("datalabel values for main graph :" + dataLabel)
 
                 var deviceLabel = [];
 
@@ -332,15 +337,21 @@
                     var plug = [{% for x in Plugs %}'{{ x.plug_name|escapejs }}',{% endfor %}];
 
 
+<<<<<<< HEAD
                    /*
                    Iterating through the plug lost and calling a API from the main server to get
                    hourly data.
                    The api call is not async
                    */
+=======
+                        //Still working on it
+                        var device_name = "{{ plug.plug_name }}";
+>>>>>>> 1792a8bd6873fba3259bc113fa85eb425a5a0730
 
                     for(var i = 0; i < plug.length;i++){
                       console.log(plug[i]);
 
+<<<<<<< HEAD
                       jQuery.ajax({
                          url: '/plug?plug_id='+plug[i],
                          success: function (data) {
@@ -362,9 +373,37 @@
 
                        }
 
+=======
+                        // Instantiating the request object
+                        request.open("GET", '/plug?plug_id=' + device_name);
+
+                        {#request.onreadystatechange = function () {#}
+                        {#    // Check if the request is compete and was successful#}
+                        {#    if (this.readyState === 4 && this.status === 200) {#}
+                        {#        // Inserting the response from server into an HTML element#}
+                        {##}
+                        {#        for (var i = 0; i < data.length; i++) {#}
+                        {#            data = this.responseText;#}
+                        {#            var time_range = data[i].hour + "-" + data[i].hour + ":59";#}
+                        {#            console.log(time_range)#}
+                        {#            console.log(data[i].Watts);#}
+                        {#            values.push(data[i].Watts);#}
+                        {#            time.push(time_range);#}
+                        {#        }#}
+                        {#        console.log('here');#}
+                        {#        chart_devices(device_name, values, time);#}
+                        {#    }#}
+                        {#};#}
+
+                        request.send();
 
 
-                   async function chart_devices(device, values, time) {
+
+                    {% endfor %}
+>>>>>>> 1792a8bd6873fba3259bc113fa85eb425a5a0730
+
+
+                    async function chart_devices(device, values, time) {
 
                         var device_id = "energy_generation_" + device;
                         var ctx1 = document.getElementById(device_id).getContext("2d");

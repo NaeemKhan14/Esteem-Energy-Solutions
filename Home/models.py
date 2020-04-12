@@ -11,7 +11,7 @@ class plugs(models.Model):
     plug_name = models.TextField(max_length = 40)
     plug_model_name = models.TextField(max_length = 40)
     room_no = models.ForeignKey(room, default=1, on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default=True)
     ip_address = models.TextField(max_length = 40,default="0.0.0.0")
 
 class plug_electricity_consumption(models.Model):

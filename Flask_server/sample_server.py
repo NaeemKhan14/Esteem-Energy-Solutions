@@ -59,7 +59,7 @@ Devices = [
         'DeviceName': 'Ac1',
         'DeviceModel': 'Amazing Cooling',
         'ElecConsp': 0.98,
-        'CurConsp': 1.20,
+        'CurConsp': 0.98,
         'status': 'on',
         'ip_address': '127.0.0.8'
     }
@@ -90,6 +90,7 @@ def api_status(device_id):
 
     if get_device:
         get_device['status'] = 'on' if get_device['status'] == 'off' else 'off'
+        get_device['CurConsp'] = 0 if get_device['CurConsp'] == get_device['ElecConsp'] else get_device['ElecConsp']
         return jsonify(Devices)
 
     return jsonify('No device exsists with this id')
