@@ -117,8 +117,13 @@ class RoomPage(TemplateView):
             values = request.POST['change_status'].split(',')
             requests.get("http://127.0.0.1:5000/api/changestatus/" + values[1])
             plug_obj = plugs.objects.get(ip_address=values[0], plug_name=values[1])
+            print(plug_obj.status)
 
-            plug_obj.status = False if plug_obj.status else True
+            if plug_obj.status:
+                plug_obj.status = False
+            else:
+                plug_obj.status = True
+            #plug_obj.status = True if plug_obj.status else False
             plug_obj.save()
 
         if 'add_device' in request.POST:
@@ -135,7 +140,6 @@ class Plugs(TemplateView):
    def get(self, request, *args, **kwargs):
        #Line graph for plugs hourly data
        plug_id = request.GET.get('plug_id')
-       print(plug_id)
 
 
 
@@ -147,7 +151,6 @@ class Plugs(TemplateView):
            month = now.month
            year = now.year
            hour=time.hour
-           print(hour)
            hourly_data = []
            plug = plugs.objects.get(plug_name=plug_id)
 
@@ -157,9 +160,7 @@ class Plugs(TemplateView):
               l = (list(plug_electricity_consumption.objects.filter(plug_no=plug,timestamp__day=day,timestamp__month=month,timestamp__year=year,timestamp__hour=i)))
               for j in l:
                   sum += j.Watt
-                  print(j.Watt)
               hourly_data.append({'hour':i,'Watts':sum})
-           print(hourly_data)
            return JsonResponse(hourly_data, safe=False)
 
        return JsonResponse("{'error':'This plug does not exist in the database'}", safe=False)

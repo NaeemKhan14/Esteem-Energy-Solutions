@@ -109,8 +109,9 @@
                                     {% csrf_token %}
 
                                     <button type="submit" value="{{ plug.ip_address }},{{ plug.plug_name }}"
-                                            name="change_status" class=" btn-outline-danger">{% if plug.status %} Turn On{% else %}Turn Off{% endif %}
+                                            name="change_status" class=" btn-outline-danger">{% if plug.status %} On{% else %}Off{% endif %}
                                     </button>
+                                    {{ plug.status }}
                                 </form>
 
                             </div>
@@ -336,7 +337,7 @@
                    hourly data.
                    The api call is not async
                    */
-                   
+
                     for(var i = 0; i < plug.length;i++){
                       console.log(plug[i]);
 
