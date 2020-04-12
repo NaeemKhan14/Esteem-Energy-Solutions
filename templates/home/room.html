@@ -85,7 +85,6 @@
                                         <i class="now-ui-icons loader_gear"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Edit</a>
                                         {% load custom_tags %}
                                         {% if request.user|has_group:"Admin" %}
                                             <form method="POST"> {% csrf_token %}
@@ -157,19 +156,20 @@
                                                     <h4 class="modal-title">Add Device</h4>
                                                 </div>
                                                 {% if available_devices %}
-                                                    <h4 class="modal-title">Available Devices</h4>
-
+                                                    <!--<h4 class="modal-title">Available Devices</h4>-->
+                                                        <div class="modal-body">
                                                         <form method="POST">
                                                             {% for device in available_devices %}
                                                             {% csrf_token %}
                                                             <input type="hidden" name="{{ device.0 }}_ip_address" value="{{ device.1 }}" />
-                                                            <input type="submit" name="new_device" value="{{ device.0 }}" />
+                                                            <input type="submit" name="new_device" value="{{ device.0 }}" class="btn btn-gray-dark" style="background-color:#007bff"/>
                                                         {% endfor %}
                                                         </form>
+                                                        </div>
 
 
                                                 {% endif %}
-                                                <div class="modal-body">
+                                                <!--<div class="modal-body">
                                                     <p>
                                                         <label>Device Name </label>
                                                         <input type="text" id="device_name" name="plug_name"/>
@@ -182,10 +182,10 @@
                                                         <label>Ip Address </label>
                                                         <input type="text" id="ip_address" name="ip_address"/>
                                                     </p>
-                                                </div>
+                                                </div>-->
                                                 <div class="modal-footer">
-                                                    <input type="submit" name="add_device" value="Confirm"
-                                                           class="btn btn-default"/>
+                                                    <!--<input type="submit" name="add_device" value="Confirm"
+                                                           class="btn btn-default"/>-->
                                                     <button type="button" class="btn btn-default"
                                                             data-dismiss="modal">Close
                                                     </button>

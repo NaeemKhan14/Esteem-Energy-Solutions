@@ -139,12 +139,12 @@ class RoomPage(TemplateView):
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+#JSON for nessary data for hourly data
+
 class Plugs(TemplateView):
    def get(self, request, *args, **kwargs):
        #Line graph for plugs hourly data
        plug_id = request.GET.get('plug_id')
-
-
 
        #We start with default hourly data
        if plug_id != None:
