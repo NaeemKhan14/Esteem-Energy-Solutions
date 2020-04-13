@@ -1,4 +1,3 @@
-
 from django.db import models
 
 # Create your models here.
@@ -16,10 +15,10 @@ class plugs(models.Model):
 
 class plug_electricity_consumption(models.Model):
     plug_no = models.ForeignKey(plugs, default=1,on_delete=models.CASCADE)
-    Watt = models.DecimalField(max_digits=20, decimal_places=2) 
+    Watt = models.DecimalField(max_digits=20, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-# Second part 
+# Second part
 class energy_generation(models.Model):
     e_id = models.AutoField(primary_key=True)
     name = models.TextField()
@@ -30,23 +29,17 @@ class energy_mode(models.Model):
 
 class battery(models.Model):
     e_id = models.ForeignKey(energy_generation, default=1,on_delete=models.CASCADE)
-    capacity = models.DecimalField(max_digits=20, decimal_places=2) 
-    current_charge = models.DecimalField(max_digits=3, decimal_places=2) 
+    capacity = models.DecimalField(max_digits=20, decimal_places=2)
+    current_charge = models.DecimalField(max_digits=3, decimal_places=2)
     current_capacity = models.DecimalField(max_digits=20, decimal_places=2)
-    maximum_capacity = models.DecimalField(max_digits=20, decimal_places=2) 
+    maximum_capacity = models.DecimalField(max_digits=20, decimal_places=2)
 
 class power_transaction(models.Model):
     e_id = models.ForeignKey(energy_generation, default=1,on_delete=models.CASCADE)
     transfer = models.DecimalField(max_digits=20, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-class power_generation: 
+class power_generation:
     e_id = models.ForeignKey(energy_generation, default=1, on_delete=models.CASCADE)
     current_power = models.DecimalField(max_digits=20, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
-
-
-
-
-
-

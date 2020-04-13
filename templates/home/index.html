@@ -49,7 +49,7 @@
                                 <a class="dropdown-item" href="#">Hourly</a>
                             </div>
 
-                            
+
                         </li>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -130,7 +130,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <canvas id="energy_generation"></canvas>
+                                    <canvas id="energy_consumption_{{ rooms.room_no }}"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -201,188 +201,78 @@
                         </div> -->
                     </div>
                 </div>
-                {% endif %} 
+                {% endif %}
 
             </div>
         </div>
 
         <script>
-            {#var consumptionData = [];#}
-            {#var timeIntervalData = [];#}
-            {#var consumption = null;#}
-            {#const api_url = 'http://127.0.0.1:5000/api/energyconsumption/Lamp1'#}
-            {##}
-            {#async function getConsumption(){#}
-            {#    const response = await fetch(api_url);#}
-            {#    const data = await response.json();#}
-            {#    console.log("Data from api is " + data);#}
-            {#    console.log("Old consumption value is: " + consumption)#}
-            {#    #}
-            {#    consumption = data;#}
-            {#    console.log("New consumption value is: " + consumption)#}
-            {#    pushValues();#}
-            {#}#}
-           
 
-           function pushValues(){
-               consumptionData.push(consumption);
-
-               // This is for current time 
-               timeIntervalData.push(new Date().toLocaleTimeString());
-
-
-               //console.log(consumptionData);
-           }
 
         //    setInterval(pushValues, 5000);
 
             $(document).ready(function () {
-                makeChart();
 
-                setInterval(makeChart, 5000);
-
-                async function makeChart(){
-                    await getConsumption();
-
-                // Javascript method's body can be found in assets/js/demos.js
-                // demo.initDashboardPageCharts();
-
-                // -------------------------- GRAPH ONE MAIN HOUSE GRAPH -----------------------------------
-
-                var ctx = document.getElementById('bigDashboardChart').getContext("2d");
-                chartColor = "#FFFFFF";
-
-                var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
-                gradientStroke.addColorStop(0, '#80b6f4');
-                gradientStroke.addColorStop(1, chartColor);
-
-                var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
-                gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-                gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
-
-                var myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-
-                        labels: timeIntervalData,
-                        datasets: [{
-                            label: "KwH",
-                            borderColor: chartColor,
-                            pointBorderColor: chartColor,
-                            pointBackgroundColor: "#1e3d60",
-                            pointHoverBackgroundColor: "#1e3d60",
-                            pointHoverBorderColor: chartColor,
-                            pointBorderWidth: 1,
-                            pointHoverRadius: 7,
-                            pointHoverBorderWidth: 2,
-                            pointRadius: 5,
-                            fill: true,
-                            backgroundColor: gradientFill,
-                            borderWidth: 2,
-                            data: consumptionData // Fill in data here
-                        }]
-                    }
-                    ,
-                    options: {
-                        layout: {
-                            padding: {
-                                left: 20,
-                                right: 20,
-                                top: 0,
-                                bottom: 0
-                            }
-                        },
-                        maintainAspectRatio: false,
-                        tooltips: {
-                            backgroundColor: '#fff',
-                            titleFontColor: '#333',
-                            bodyFontColor: '#666',
-                            bodySpacing: 4,
-                            xPadding: 12,
-                            mode: "nearest",
-                            intersect: 0,
-                            position: "nearest"
-                        },
-                        legend: {
-                            position: "bottom",
-                            fillStyle: "#FFF",
-                            display: false
-                        },
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    fontColor: "rgba(255,255,255,0.4)",
-                                    fontStyle: "bold",
-                                    beginAtZero: true,
-                                    maxTicksLimit: 5,
-                                    padding: 10
-                                },
-                                gridLines: {
-                                    drawTicks: true,
-                                    drawBorder: false,
-                                    display: true,
-                                    color: "rgba(255,255,255,0.1)",
-                                    zeroLineColor: "transparent"
-                                }
-
-                            }],
-                            xAxes: [{
-                                gridLines: {
-                                    zeroLineColor: "transparent",
-                                    display: false,
-
-                                },
-                                ticks: {
-                                    padding: 10,
-                                    fontColor: "rgba(255,255,255,0.4)",
-                                    fontStyle: "bold"
-                                }
-                            }]
-                        }
-                    }
-                });
-                myChart.update(0);
+              var chartColor = "#FFFFFF";
 
 
-                var cardStatsMiniLineColor = "#fff",
-                    cardStatsMiniDotColor = "#fff";
+                //-------------------------------------------- Energy Consumption Graph -----------------------------------------------------
+                var room = [{% for x in Room %}'{{ x.room_no|escapejs }}',{% endfor %}];
+               /*
+               Iterating through the plug lost and calling a API from the main server to get
+               hourly data.
+               The api call is not async
+               */
 
-                //-------------------------------------------- Energy Generation Graph -----------------------------------------------------
 
-                var ctx1 = document.getElementById('energy_generation').getContext("2d");
+                for(var i = 0; i < room.length;i++){
+                  console.log(room[i]);
+                  jQuery.ajax({
+                     url: '/room?room_id='+room[i],
+                     success: function (data) {
+                       values = [];
+                       time = [];
+                       for(var j = 0;j < data.length;j++){
+                           var time_range = data[j].hour + "-" + data[j].hour + ":59";
+                           console.log(time_range)
+                           console.log(data[j].Watts);
+                           values.push(data[j].Watts);
+                           time.push(time_range);
+                       }
+                           console.log(i);
+                           //console.log(plug[i])
+                           chart_devices(room[i], values, time);
+                     },
+                     async: false
+                     });
 
-                gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
-                gradientStroke.addColorStop(0, '#80b6f4');
-                gradientStroke.addColorStop(1, chartColor);
+                   }
 
-                gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
-                // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
-                //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
 
-                myChart1 = new Chart(ctx1, {
-                    type: 'line',
-                    responsive: true,
-                    data: {
-                        labels: ["1:00", "2:00", "4:00"],
-                        datasets: [{
-                            label: "Solar panel KwH",
-                            borderColor: "#f96332",
-                            pointBorderColor: "#FFF",
-                            pointBackgroundColor: "#f96332",
-                            pointBorderWidth: 2,
-                            pointHoverRadius: 4,
-                            pointHoverBorderWidth: 1,
-                            pointRadius: 4,
-                            fill: true,
-                            backgroundColor: gradientFill,
-                            borderWidth: 2,
-                            data: [542, 480, 430]             // Data point
-                        },
-                            {
-                                label: "Grid KwH",
-                                borderColor: "blue",
+
+                async function chart_devices(room, values, time) {
+
+                    var room_id = "energy_consumption_"+room;
+                    var ctx1 = document.getElementById(room_id).getContext("2d");
+
+                    gradientStroke = ctx1.createLinearGradient(500, 0, 100, 0);
+                    gradientStroke.addColorStop(0, '#80b6f4');
+                    gradientStroke.addColorStop(1, chartColor);
+
+                    gradientFill = ctx1.createLinearGradient(0, 170, 0, 50);
+                    // gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+                    //gradientFill.addColorStop(1, "rgba(249, 99, 59, 0.40)");
+
+                    var myChart1 = new Chart(ctx1, {
+                        type: 'line',
+                        responsive: true,
+                        data: {
+                            labels: time,
+                            datasets: [{
+                                label: room +" KwH",
+                                borderColor: "#f96332",
                                 pointBorderColor: "#FFF",
-                                pointBackgroundColor: "blue",
+                                pointBackgroundColor: "#f96332",
                                 pointBorderWidth: 2,
                                 pointHoverRadius: 4,
                                 pointHoverBorderWidth: 1,
@@ -390,31 +280,17 @@
                                 fill: true,
                                 backgroundColor: gradientFill,
                                 borderWidth: 2,
-                                data: [550, 53, 45]                     // Data point 
-                            },
-                            {
-                                label: "Battery KwH",
-                                borderColor: "green",
-                                pointBorderColor: "#FFF",
-                                pointBackgroundColor: "green",
-                                pointBorderWidth: 2,
-                                pointHoverRadius: 4,
-                                pointHoverBorderWidth: 1,
-                                pointRadius: 4,
-                                fill: true,
-                                backgroundColor: gradientFill,
-                                borderWidth: 2,
-                                data: [0.1, -53, 45]                     // Data point 
+                                data: values       // Data point
                             }
-                        ]
-                    },
-                    options: gradientChartOptionsConfiguration
-                });
+                            ]
+                        },
+                        options: gradientChartOptionsConfiguration
+                    });
+                }
 
-            }
             });
-            
-            
+
+
         </script>
 
         {% include "home/partials/footer.html" %}

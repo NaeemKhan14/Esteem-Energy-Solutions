@@ -158,7 +158,7 @@ class Plugs(TemplateView):
            plug = plugs.objects.get(plug_name=plug_id)
 
            #sum for every hour
-           for i in range(hour+1):
+           for i in range(hour):
               sum = 0
               l = (list(plug_electricity_consumption.objects.filter(plug_no=plug,timestamp__day=day,timestamp__month=month,timestamp__year=year,timestamp__hour=i)))
               for j in l:
@@ -167,3 +167,55 @@ class Plugs(TemplateView):
            return JsonResponse(hourly_data, safe=False)
 
        return JsonResponse("{'error':'This plug does not exist in the database'}", safe=False)
+
+
+class Rooms(TemplateView):
+    def get(self, request, *args, **kwargs):
+        room_id = request.GET.get('room_id')
+
+        now = datetime.datetime.now()
+        time = now.time()
+        day = now.day
+        month = now.month
+        year = now.year
+        hour=time.hour
+        #Storing response data
+        hourly_data = []
+        #Storing all data for the plug
+        hourly_data_tot_plug = []
+
+        try:
+            plugs_in_room = plugs.objects.filter(room_no=room_id).order_by("plug_no")
+        except plugs.DoesNotExist:
+            plugs_in_room = []
+            for i in range(hour):
+                hourly_data.append({'hour':i,'Watts':0})
+            return JsonResponse(hourly_data, safe=False)
+
+        # Forces it to an array if their is only 1 result
+        if not hasattr(plugs_in_room, '__iter__'):
+            plugs_in_room = [plugs_in_room]
+
+        #Not a effective way but there is duplicate code but for the current time it's a working solution
+        #sum for every hour
+
+        for i in plugs_in_room:
+
+             plug_no = plugs.objects.get(plug_name=i.plug_name)
+
+             hourly_data_plug = []
+             for k in range(hour):
+                sum = 0
+                l = (list(plug_electricity_consumption.objects.filter(plug_no=plug_no,timestamp__day=day,timestamp__month=month,timestamp__year=year,timestamp__hour=k)))
+                for j in l:
+                   sum += j.Watt
+                   hourly_data_plug.append({'hour':k,'Watts':sum})
+                hourly_data_tot_plug.append(hourly_data_plug)
+
+        for i in range(hour):
+            sum = 0
+            for j in hourly_data_tot_plug:
+                sum += j[i]['Watts']
+            hourly_data.append({'hour':i,'Watts':sum})
+
+        return JsonResponse(hourly_data, safe=False)
