@@ -38,13 +38,39 @@ class HomePage(TemplateView):
     template_name = 'home/index.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {"Room": room.objects.all()})
+        api_list = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/").json()        # print("rooms + " ,room.objects.)
+        r = room.objects.all()
+        l = []
+
+        for i in r:
+            room_number = room.objects.get(room_no=i.room_no)
+            plug = plugs.objects.filter(room_no=room_number)
+            sum = 0
+            for j in plug:
+
+                for k in api_list:
+                    if k['DeviceName'] == j.plug_name:
+                        sum += k['CurConsp']
+            l.append({'room_name':i.room_name,'CurConsp':sum})
+            #room_data[r[i].room_no] = 0
+        room_names, room_consumptions = [],[]
+
+        for i in range(len(l)):
+            room_names.append(l[i]['room_name'])
+            room_consumptions.append(l[i]['CurConsp'])
+
+        room_names = str(room_names)
+        print(room_names, room_consumptions)
+        # return JsonResponse(l, safe= False)
+
+        return render(request, self.template_name, {"Room": room.objects.all(), "name_rooms": room_names, "consumption_rooms": room_consumptions},)
 
     def post(self, request, *args, **kwargs):
         if 'remove_room' in request.POST:
             room.objects.filter(room_no=request.POST.get('room_no')).delete()
         else:
             room.objects.create(room_name=request.POST.get('name'))
+
 
         return redirect('homepage')
 
@@ -81,6 +107,7 @@ class RoomPage(TemplateView):
 
         consumption = []
         available_devices = []
+        dev = []
 
         api_devices_list = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/").json()
 
@@ -92,6 +119,8 @@ class RoomPage(TemplateView):
             # that means it is a new device and we show it as a list in front end to be added.
             if not plugs.objects.filter(ip_address=device['ip_address']).exists():
                 available_devices.append([device['DeviceName'], device['ip_address']])
+
+        print(dev)
 
 
         return render(request, self.template_name, {"Room": room.objects.all(),
@@ -111,6 +140,7 @@ class RoomPage(TemplateView):
                                  plug_model_name=device_data['DeviceModel'],
                                  ip_address=device_data['ip_address'],
                                  room_no=room.objects.get(room_no=kwargs['room_no']),
+                                 # curr_consumption=device_data['CurConsp'],
                                  status=False if device_data['status'] == "off" else True)
 
         if 'change_status' in request.POST:
@@ -248,9 +278,11 @@ class total_consumption(TemplateView):
             hourly_data_tot_plug = []
             hourly_data_room = []
 
+            room_obj = room.objects.filter(room_no= r.room_no)
+
             # Redundant code
             try:
-                plugs_in_room = plugs.objects.filter(room_no=room_id).order_by("plug_no")
+                plugs_in_room = plugs.objects.filter(room_no=room_obj).order_by("plug_no")
             except plugs.DoesNotExist:
                 plugs_in_room = []
                 for i in range(hour):
