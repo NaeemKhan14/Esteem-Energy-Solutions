@@ -213,6 +213,118 @@
 
             $(document).ready(function () {
 
+
+
+                var maingraph_rooms = "{{ name_rooms| safe }}";
+                maingraph_rooms = maingraph_rooms.replace(/'/g, '"');
+                var maingraph_consumptions = "{{ consumption_rooms }}";
+                console.log(typeof maingraph_consumptions);
+
+
+                var consumption_label = JSON.parse(maingraph_consumptions)
+                var room_label = JSON.parse(maingraph_rooms)
+
+                console.log(maingraph_consumptions, maingraph_rooms);
+                var ctx = document.getElementById('bigDashboardChart').getContext("2d");
+                    var chartColor = "#FFFFFF";
+
+                    var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+                    gradientStroke.addColorStop(0, '#80b6f4');
+                    gradientStroke.addColorStop(1, chartColor);
+
+                    var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
+                    gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
+                    gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
+
+                    var myChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: room_label,
+                            datasets: [{
+                                label: 'room',
+                                data: consumption_label,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            layout: {
+                                padding: {
+                                    left: 20,
+                                    right: 20,
+                                    top: 0,
+                                    bottom: 0
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            tooltips: {
+                                backgroundColor: '#fff',
+                                titleFontColor: '#333',
+                                bodyFontColor: '#666',
+                                bodySpacing: 4,
+                                xPadding: 12,
+                                mode: "nearest",
+                                intersect: 0,
+                                position: "nearest"
+                            },
+                            legend: {
+                                position: "top",
+                                fillStyle: "",
+                                display: true,
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        fontColor: "rgba(255,255,255,0.4)",
+                                        fontStyle: "bold",
+                                        beginAtZero: true,
+                                        maxTicksLimit: 5,
+                                        padding: 10
+                                    },
+                                    gridLines: {
+                                        drawTicks: true,
+                                        drawBorder: false,
+                                        display: true,
+                                        color: "rgba(255,255,255,0.1)",
+                                        zeroLineColor: "transparent"
+                                    }
+
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        zeroLineColor: "transparent",
+                                        display: false,
+
+                                    },
+                                    ticks: {
+                                        padding: 10,
+                                        fontColor: "rgba(255,255,255,0.4)",
+                                        fontStyle: "bold"
+                                    }
+                                }]
+                            }
+                        }
+
+                    });
+
+                    var cardStatsMiniLineColor = "#fff",
+                        cardStatsMiniDotColor = "#fff";
+
               var chartColor = "#FFFFFF";
 
 
