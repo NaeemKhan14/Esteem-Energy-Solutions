@@ -169,6 +169,8 @@ class Plugs(TemplateView):
        return JsonResponse("{'error':'This plug does not exist in the database'}", safe=False)
 
 
+#Sum Data for every Room for now every hour
+
 class Rooms(TemplateView):
     def get(self, request, *args, **kwargs):
         room_id = request.GET.get('room_id')
@@ -219,3 +221,42 @@ class Rooms(TemplateView):
             hourly_data.append({'hour':i,'Watts':sum})
 
         return JsonResponse(hourly_data, safe=False)
+
+
+# NOTICE : There is a lot of redudancy as doing inner API calls within django API server seems to be having some major issues
+class total_consumption(TemplateView):
+    def get(self, request, *args, **kwargs):
+
+        now = datetime.datetime.now()
+        time = now.time()
+        day = now.day
+        month = now.month
+        year = now.year
+        hour=time.hour
+
+        #Storing response data
+        hourly_data = []
+
+        #Storing all data for rooms and plugs
+        hourly_data_tot_room = []
+
+        rooms = room.objects.all()
+
+        for r in rooms:
+
+            #Storing all data for the plug
+            hourly_data_tot_plug = []
+            hourly_data_room = []
+
+            # Redundant code
+            try:
+                plugs_in_room = plugs.objects.filter(room_no=room_id).order_by("plug_no")
+            except plugs.DoesNotExist:
+                plugs_in_room = []
+                for i in range(hour):
+                    hourly_data_room.append({'hour':i,'Watts':0})
+                hourly_data_tot_plug.append(hourly_data_room)
+
+            # Forces it to an array if their is only 1 result
+            if not hasattr(plugs_in_room, '__iter__'):
+                plugs_in_room = [plugs_in_room]
