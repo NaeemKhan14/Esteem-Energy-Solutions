@@ -28,9 +28,14 @@ class BackgroundClass:
                 for k in api_list:
                     if k['DeviceName'] == j.plug_name:
                         sum += k['CurConsp']
-            l.append({'room_name':i.room_no,'CurConsp':sum})
+            l.append({'room_name':i.room_name,'CurConsp':sum})
 
-            print(l)
+        sum = 0
+        for i in l:
+            sum += i['CurConsp']
+
+        print(sum)
+
             #power_req += i[CurConsp]
         # print(power_req)
         # check power mode
