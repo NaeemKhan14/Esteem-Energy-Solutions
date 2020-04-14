@@ -212,6 +212,7 @@ class Rooms(TemplateView):
                 for j in l:
                    sum += j.Watt
                    hourly_data_plug.append({'hour':k,'Watts':sum})
+                print(len(hourly_data_plug))
                 hourly_data_tot_plug.append(hourly_data_plug)
 
         for i in range(hour):
