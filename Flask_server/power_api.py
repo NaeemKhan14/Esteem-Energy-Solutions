@@ -11,7 +11,7 @@ PowerSources = [
         'ChargingState': False,
         'MaximumCapacity': 15.0,
         'RemainingCapacity': 15.0,
-        'CurrentSupplying': 0,
+        'CurrentSupplied': 0,
         'BatteryPercentage': 100
 
     },
@@ -20,7 +20,7 @@ PowerSources = [
         'SourceName': 'SolarPanel1',
         'SupplyingPower': False,
         'ChargingState': False,
-        'CurrentSupplying': 0
+        'CurrentSupplied': 0
 
     },
 
@@ -28,7 +28,7 @@ PowerSources = [
         'SourceName': 'PowerGrid1',
         'SupplyingPower': False,
         'PowerCut': False,
-        'CurrentSupplying': 0
+        'CurrentSupplied': 0
 
     }
 
@@ -45,7 +45,7 @@ def all_sources():
 @power_app.route('/api/batterydischarge/<float:discharge>', methods=['GET'])
 def batteryTransaction(discharge):
     if Battery1['RemainingCapacity'] - discharge >= 0:
-        Battery1['CurrentSupplying'] += discharge
+        Battery1['CurrentSupplied'] += discharge
         Battery1['RemainingCapacity'] -= discharge
         Battery1['SupplyingPower'] = True
         if Battery1['RemainingCapacity'] == 0:
@@ -59,7 +59,7 @@ def batteryTransaction(discharge):
 @power_app.route('/api/batterycharge/<float:charge>', methods=['GET'])
 def batteryCharging(charge):
     if Battery1['RemainingCapacity'] + charge <= Battery1['MaximumCapacity']:
-        Battery1['CurrentSupplying'] = charge
+        Battery1['CurrentSupplied'] = charge
         Battery1['RemainingCapacity'] += charge
         Battery1['ChargingState'] = True
         if Battery1['RemainingCapacity'] == Battery1['MaximumCapacity']:
@@ -69,6 +69,18 @@ def batteryCharging(charge):
         Battery1['ChargingState'] = False
 
     Battery1['BatteryPercentage'] = int(Battery1['RemainingCapacity'] / Battery1['MaximumCapacity'] * 100)
+    return jsonify(PowerSources)
+
+
+@power_app.route('/api/givepower/<string:source>/<float:charge>', methods=['GET'])
+def powerSupply(source, charge):
+    if source == 'Battery1':
+        return jsonify("Error wrong method used for battery.")
+    Source1 = next(item for item in PowerSources if item["SourceName"] == source)
+    Source1['SupplyingPower'] = True
+    Source1['CurrentSupplied'] += charge
+    if charge == 0.0:
+        Source1['SupplyingPower'] = False
     return jsonify(PowerSources)
 
 
