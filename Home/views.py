@@ -15,10 +15,28 @@ class BackgroundClass:
 
     @staticmethod
     def power_allot_func():
+        api_list = requests.get("http://127.0.0.1:5000/api/alldevicesconsumption/").json()        # print("rooms + " ,room.objects.)
+        r = room.objects.all()
+        l = []
+
+        for i in r:
+            room_number = room.objects.get(room_no=i.room_no)
+            plug = plugs.objects.filter(room_no=room_number)
+            sum = 0
+            for j in plug:
+
+                for k in api_list:
+                    if k['DeviceName'] == j.plug_name:
+                        sum += k['CurConsp']
+            l.append({'room_name':i.room_no,'CurConsp':sum})
+
+            print(l)
+            #power_req += i[CurConsp]
+        # print(power_req)
         # check power mode
         # Total power consumption by house
         # Do according transaction
-        print("lol")
+
 
     @staticmethod
     def device_consumption():
