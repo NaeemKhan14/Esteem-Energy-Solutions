@@ -5,7 +5,7 @@
 
 <body class="">
     <div class="wrapper ">
-       
+
         <!-- Side Bar -->
         {% include "home/partials/sidebar.html" %}
 
@@ -32,9 +32,9 @@
                         <span class="navbar-toggler-bar navbar-kebab"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                      
+
                         <ul class="navbar-nav">
-                          
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
@@ -52,7 +52,7 @@
                             <li class="nav-item">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
-        
+
                                         <i class="now-ui-icons users_single-02"></i>
                                         <p>
                                             <span class="d-lg-none d-md-block">Account</span>
@@ -62,7 +62,6 @@
                                         <a class="dropdown-item" href="/accounts/logout/">Logout </a>
                                     </div>
                                 </li>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -82,10 +81,10 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p>Uses power from unless battery charge 100% (Use only when frequent power cuts). 
+                                <p>Never uses power from battery unless there is powercut and not enough energy is genrated from the solar panel
                                 </p>
                                 {% load custom_tags %}
-                                {% for obj in Energy_mode %} 
+                                {% for obj in Energy_mode %}
                                 {% if obj.mode_id == "e1"%}
                                 <button type="button"
                                 class=" btn-outline-danger" id="e2">
@@ -100,9 +99,9 @@
                                 {% endif %}
 
                                 {% endfor %}
-                                
+
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -112,15 +111,15 @@
                                 <h5 class="card-category"></h5>
                                 <h4 class="card-title">Self Powered</h4>
                                 <div class="dropdown">
-                                  
+
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p>Powered from solar panel and battery (Recommeded). 
+                                <p>Powered from solar panel and battery (Recommeded).
                                 </p>
-                                
+
                                 {% load custom_tags %}
-                                {% for obj in Energy_mode %} 
+                                {% for obj in Energy_mode %}
                                 {% if obj.mode_id == "e2"%}
                                 <button type="button"
                                 class=" btn-outline-danger" id="e2">
@@ -135,7 +134,7 @@
                                 {% endif %}
 
                                 {% endfor %}
-                                
+
                             </div>
                         </div>
                     </div>
@@ -149,11 +148,11 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p>Power Pulled from Grid (Not Recommeded). 
+                                <p>Power Pulled from Grid (Not Recommeded).
                                 </p>
-                                
+
                                 {% load custom_tags %}
-                                {% for obj in Energy_mode %} 
+                                {% for obj in Energy_mode %}
                                 {% if obj.mode_id == "e3"%}
                                 <button type="button"
                                 class=" btn-outline-danger" id="e3">
@@ -169,11 +168,11 @@
 
                                 {% endfor %}
                             </div>
-                            
+
                         </div>
                     </div>
-                   
-                   
+
+
                 </div>
             </div>
 
@@ -213,7 +212,7 @@
                         fill: true,
                         backgroundColor: gradientFill,
                         borderWidth: 2,
-                        data: [1, 7, 11] // Fill in data here 
+                        data: [1, 7, 11] // Fill in data here
                     },
                     {
                         label: "Battery KwH",
@@ -229,7 +228,7 @@
                         fill: true,
                         backgroundColor: gradientFill,
                         borderWidth: 2,
-                        data: [8, 7, -2] // Fill in data here 
+                        data: [8, 7, -2] // Fill in data here
                     },
                     {
                         label: "Grid KwH",
@@ -245,7 +244,7 @@
                         fill: true,
                         backgroundColor: gradientFill,
                         borderWidth: 2,
-                        data: [0, 0, 0] // Fill in data here 
+                        data: [0, 0, 0] // Fill in data here
                     }]
                         },
                         options: {
@@ -353,7 +352,7 @@
                                 fill: true,
                                 backgroundColor: gradientFill,
                                 borderWidth: 2,
-                                data: [550, 53, 45]                     // Data point 
+                                data: [550, 53, 45]                     // Data point
                             },
                             {
                                 label: "Battery KwH",
@@ -367,7 +366,7 @@
                                 fill: true,
                                 backgroundColor: gradientFill,
                                 borderWidth: 2,
-                                data: [0.1, -53, 45]                     // Data point 
+                                data: [0.1, -53, 45]                     // Data point
                             }
                             ]
                         },

@@ -7,6 +7,7 @@ power_app.config["DEBUG"] = True
 PowerSources = [
     {
         'SourceName': 'Battery1',
+        'type': 'Battery',
         'SupplyingPower': False,
         'ChargingState': False,
         'MaximumCapacity': 15.0,
@@ -18,6 +19,8 @@ PowerSources = [
 
     {
         'SourceName': 'SolarPanel1',
+        'type':'EnergyGenerator',
+        'CurrentGenerated':3.68,
         'SupplyingPower': False,
         'ChargingState': False,
         'CurrentSupplied': 0
@@ -26,8 +29,9 @@ PowerSources = [
 
     {
         'SourceName': 'PowerGrid1',
+        'type':'Grid',
         'SupplyingPower': False,
-        'PowerCut': False,
+        'PowerCut': True,
         'CurrentSupplied': 0
 
     }
@@ -35,6 +39,10 @@ PowerSources = [
 ]
 
 Battery1 = next(item for item in PowerSources if item["SourceName"] == 'Battery1')
+
+#Solar panel Simulator
+
+
 
 
 @power_app.route('/api', methods=['GET'])
@@ -83,5 +91,5 @@ def powerSupply(source, charge):
         Source1['SupplyingPower'] = False
     return jsonify(PowerSources)
 
-
-power_app.run(port=12345)
+if __name__ == '__main__':
+    power_app.run(port=12345)
