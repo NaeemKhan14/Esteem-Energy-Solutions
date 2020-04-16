@@ -114,15 +114,16 @@ class BackgroundClass:
                 except energy_generation.DoesNotExist:
                     #If the devce does exist add it to the databases
                     energy_generation.objects.create(name=j["SourceName"])
-                    e_name = energy_generation.objects.get(name=j["SourceName"])for j in energy_devices:
+                    e_name = energy_generation.objects.get(name=j["SourceName"])
 
-                if j["type"] == "Battery":
-                    if j["BatteryPercentage"] != 100:
-                        power_transaction.objects.create(e_id=e_name,transfer= battery_wire_capacity)
-                        #Battery Pulled from energy sources
-                        requests.get("http://127.0.0.1:12345/api/batterycharge/"+battery_wire_capacity).json()
-                        energy_taken += battery_wire_capacity
-                        print(energy_taken)
+                    for j in energy_devices:
+                        if j["type"] == "Battery":
+                            if j["BatteryPercentage"] != 100:
+                                power_transaction.objects.create(e_id=e_name,transfer= battery_wire_capacity)
+                                #Battery Pulled from energy sources
+                                requests.get("http://127.0.0.1:12345/api/batterycharge/"+battery_wire_capacity).json()
+                                energy_taken += battery_wire_capacity
+                                print(energy_taken)
 
         # ---------------------- Power From Grid Only-------------------------------
 
